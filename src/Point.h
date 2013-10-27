@@ -16,6 +16,7 @@ using namespace std;
 class Point
 {
 	public:
+	Point ();
 	Point (double, double, double);
 
 	// operators

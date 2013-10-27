@@ -15,6 +15,7 @@ using namespace std;
 class Vector
 {
 	public:
+	Vector ();
 	Vector (double, double, double);
 
 	// operators

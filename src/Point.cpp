@@ -5,6 +5,8 @@
 using namespace std;
 using namespace G3D;
 
+Point::Point(): coords(0,0,0) {}
+
 Point::Point(double x, double y, double z): coords(x,y,z) {}
 
 Point &Point::operator+(const Vector& rhs) 
