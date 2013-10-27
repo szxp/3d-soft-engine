@@ -23,6 +23,10 @@ class Point
 	Point  &operator-(const Vector&);
 	Vector operator-(const Point&);
 
+	double x() const { return get<0>(coords); }
+	double y() const { return get<1>(coords); }
+	double z() const { return get<2>(coords); }
+	
 	void draw();
 
 	private:

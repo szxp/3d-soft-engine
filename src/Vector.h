@@ -21,6 +21,10 @@ class Vector
 	Vector &operator+(const Vector &);
 	Vector &operator-(const Vector &);
 
+	double x() const { return get<0>(coords); }
+	double y() const { return get<1>(coords); }
+	double z() const { return get<2>(coords); }
+
 	private:
 	tuple<double, double, double> coords;
 };
