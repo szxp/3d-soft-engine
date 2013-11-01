@@ -4,7 +4,7 @@ CPPFLAGS=-std=c++11
 LDFLAGS=
 LDLIBS=
 
-SRCS=Point.cpp Vector.cpp main.cpp
+SRCS=Mesh.cpp main.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: run

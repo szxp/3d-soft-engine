@@ -1,32 +1,45 @@
 
-#include "Point.h"
-#include "Vector.h"
 #include <iostream>
+#include "Mesh.h"
 
 using namespace std;
-using namespace G3D;
 
 int main (const int argc, const char** argv)
 {
-	Point point1(1,2,1);
-	Point point2(0,4,4);
-	Vector vec1(2,0,0);
-	Vector vec2;
 
-	point1.draw();
+	QuadMesh brick(
+		{
+			Vertex(1,0,1),
+			Vertex(1,0,-1),
+			Vertex(-1,0,-1),
+			Vertex(-1,0,1),
+			Vertex(1,2,1),
+			Vertex(1,2,-1),
+			Vertex(-1,2,-1),
+			Vertex(-1,2,1)
+		},
+		{
+			0, 1, 2, 3,
+			0, 1, 5, 4,
+			1, 2, 6, 5,
+			2, 3, 7, 6,
+			0, 3, 7, 4,
+			4, 5, 6, 7
+		
+		}
+	);
+
+	for (int i=0; i < brick.vertexCount; i++) {
+		cout	<< brick.vertexList[i].pos.x << ", "
+			<< brick.vertexList[i].pos.y << ", "
+			<< brick.vertexList[i].pos.z << ", ";
+	}
 	cout << endl;
 
-	point2.draw();
+	for (int i=0; i < brick.quadCount; i++) {
+		cout << brick.quadList[i] << ", ";
+	}
 	cout << endl;
 	
-	vec2 = point1 - point2;
-	vec1 + vec2;
-	
-	(point1 + vec1).draw();
-	cout << endl;
-
-	(point2 - vec2).draw();
-	cout << endl;
-
 	return 0;
 }
