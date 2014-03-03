@@ -14,7 +14,7 @@ class Screen: public Gtk::DrawingArea {
 
 	public:
 	Screen();
-	~Screen(){};
+	virtual ~Screen(){};
 	
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 
