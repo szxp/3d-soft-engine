@@ -6,7 +6,7 @@ CXXFLAGS=-std=c++11 `pkg-config gtkmm-3.0 --cflags`
 LDFLAGS=`pkg-config gtkmm-3.0 --libs`
 DEPFILE=.depend
 
-SRCS=Mesh.cpp Screen.cpp main.cpp
+SRCS=Screen.cpp main.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: run

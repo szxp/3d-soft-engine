@@ -4,7 +4,7 @@
 
 #include <gtkmm.h>
 
-namespace G3D
+namespace g3d
 {
 
 /**
