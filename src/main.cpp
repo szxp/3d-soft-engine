@@ -1,45 +1,22 @@
 
 #include <iostream>
-#include "Mesh.h"
+#include <gtkmm/window.h>
+#include "Screen.h"
 
 using namespace std;
+using namespace G3D;
 
-int main (const int argc, const char** argv)
+int main (int argc, char** argv)
 {
 
-	QuadMesh brick(
-		{
-			Vertex(1,0,1),
-			Vertex(1,0,-1),
-			Vertex(-1,0,-1),
-			Vertex(-1,0,1),
-			Vertex(1,2,1),
-			Vertex(1,2,-1),
-			Vertex(-1,2,-1),
-			Vertex(-1,2,1)
-		},
-		{
-			0, 1, 2, 3,
-			0, 1, 5, 4,
-			1, 2, 6, 5,
-			2, 3, 7, 6,
-			0, 3, 7, 4,
-			4, 5, 6, 7
-		
-		}
-	);
+	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv);
 
-	for (int i=0; i < brick.vertexCount; i++) {
-		cout	<< brick.vertexList[i].pos.x << ", "
-			<< brick.vertexList[i].pos.y << ", "
-			<< brick.vertexList[i].pos.z << ", ";
-	}
-	cout << endl;
+	Gtk::Window window;
+	window.set_default_size(640, 480);
+        
+	Screen screen;
+	window.add(screen);
+	screen.show();
 
-	for (int i=0; i < brick.quadCount; i++) {
-		cout << brick.quadList[i] << ", ";
-	}
-	cout << endl;
-	
-	return 0;
+	return app->run(window);
 }
