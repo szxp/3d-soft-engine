@@ -1,8 +1,11 @@
 CXX=g++
 RM=rm -f
-CPPFLAGS=-std=c++11
+
+# flags for C++ compiler
+CXXFLAGS=-std=c++11
 LDFLAGS=
 LDLIBS=
+DEPFILE=.depend
 
 SRCS=Mesh.cpp main.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
@@ -12,17 +15,17 @@ all: run
 run: $(OBJS)
 	g++ $(LDFLAGS) -o run $(OBJS) $(LDLIBS)
 
-depend: .depend
+depend: $(DEPFILE)
 
 .depend: $(SRCS)
-	rm -f ./.depend
-	$(CXX) $(CPPFLAGS) -MM $^>>./.depend
+	rm -f ./$(DEPFILE)
+	$(CXX) $(CXXFLAGS) -MM $^ > ./$(DEPFILE)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(DEPFILE)
 
 dist-clean: clean
-	$(RM) *~ .depend run
+	$(RM) *~ run
 
-include .depend
+sinclude $(DEPFILE)
 
