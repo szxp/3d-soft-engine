@@ -69,3 +69,20 @@ Vec3 g3d::operator*(const float lhs, const Vec3& rhs)
 	return res;
 }
 
+
+Vec3 g3d::normalize(const Vec3& vec)
+{
+	float factor = 1 / vec.length();
+	Vec3 res { vec[0] * factor, vec[1] * factor, vec[2] * factor };
+	return res;
+}
+
+Vec3 g3d::dotProduct(const Vec3&, const Vec3&)
+{
+
+}
+
+Vec3 g3d::crossProduct(const Vec3&, const Vec3&)
+{
+
+}

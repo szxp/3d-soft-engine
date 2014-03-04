@@ -28,8 +28,18 @@ int main (int argc, char** argv)
 	assert( (vec4[0]==-2) && (vec4[1]==0) && (vec4[2]==4));
 
 	// scalar multiplication
-	Vec3 vec5 = vec1 * 20;
-	assert( (vec5[0]==20) && (vec5[1]==40) && (vec5[2]==60));
+	Vec3 vec51 = vec1 * 20;
+	Vec3 vec52 = 30 * vec1;
+	assert( (vec51[0]==20) && (vec51[1]==40) && (vec51[2]==60));
+	assert( (vec52[0]==30) && (vec52[1]==60) && (vec52[2]==90));
+
+	// length of a vector
+	Vec3 lenVec {0, 0, -4};
+	assert(4 == lenVec.length());
+	
+	// normalize
+	Vec3 norm = normalize(lenVec);
+	assert( (norm[0]==0) && (norm[1]==0) && (norm[2]==-1));
 
 	std::cout << "test ok" << std::endl;
 	return 0;
