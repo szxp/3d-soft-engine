@@ -2,6 +2,7 @@
 #include <iostream>
 #include <gtkmm/window.h>
 #include "Screen.h"
+#include "Mat4.h"
 
 using namespace std;
 using namespace g3d;
