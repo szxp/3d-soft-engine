@@ -22,3 +22,9 @@ Mat4::~Mat4() {
 float &Mat4::operator[] (const int ind) {
 	return nums[ind];
 }
+
+
+Mat4 &loadLookAtMatrix(Mat4 &res, Vec3 eye, Vec3 target, Vec3 up) {
+
+	return res;
+}

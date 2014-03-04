@@ -3,6 +3,7 @@
 #define MAT4_H
 
 #include <initializer_list>
+#include "Vec3.h"
 
 namespace g3d
 {
@@ -31,8 +32,10 @@ class Mat4
 };
 
 
-// helper functions
-Mat4 &resetLookAtMatrix();
+/**
+ * Load the look-at-matrix (view matrix) based on the camera parameters into the first argument (res).
+ */
+Mat4 &loadLookAtMatrix(Mat4 &res, Vec3 eye, Vec3 target, Vec3 up);
 
 }
 
