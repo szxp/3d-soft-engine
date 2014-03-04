@@ -1,30 +1,38 @@
+
 CXX=g++
 RM=rm -f
-
-# flags for C++ compiler
 CXXFLAGS=-std=c++11 `pkg-config gtkmm-3.0 --cflags`
 LDFLAGS=`pkg-config gtkmm-3.0 --libs`
+
 DEPFILE=.depend
+DEPFILE_TEST=.depend-test
 
 SRCS=Vec3.cpp Mat4.cpp Screen.cpp main.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
+SRCS_TEST=test.cpp
+OBJS_TEST=$(subst .cpp,.o,$(SRCS_TEST))
+
 all: run
 
 run: $(OBJS)
-	g++ $(CXXFLAGS) -o run $(OBJS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS)
 
-depend: $(DEPFILE)
+test: Vec3.o Mat4.o $(OBJS_TEST)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .depend: $(SRCS)
-	rm -f ./$(DEPFILE)
+	$(RM) ./$(DEPFILE)
 	$(CXX) $(CXXFLAGS) -MM $^ > ./$(DEPFILE)
 
-clean:
-	$(RM) $(OBJS) $(DEPFILE)
+.depend-test: $(SRCS_TEST)
+	$(RM) ./$(DEPFILE_TEST)
+	$(CXX) $(CXXFLAGS) -MM $^ > ./$(DEPFILE_TEST)
 
-dist-clean: clean
-	$(RM) *~ run
+clean:
+	$(RM) $(OBJS) $(DEPFILE) $(OBJS_TEST) $(DEPFILE_TEST) run test
+
 
 sinclude $(DEPFILE)
+sinclude $(DEPFILE_TEST)
 

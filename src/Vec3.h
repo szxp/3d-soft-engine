@@ -18,21 +18,30 @@ class Vec3
 	public:
 
 	Vec3(initializer_list<float> n);
-	~Vec3();
 
 	// operator overloading
-	float	&operator[] (const int ind);
-	//Vec3	operator-(const Vec3&);
+	float	&operator[] (const int ind) const;
+	Vec3	operator-(const Vec3&) const;
+	Vec3	operator+(const Vec3&) const;
+	Vec3	operator*(const float) const;
 
 	private:
 
 	/**
 	 * A float array which contains the elements of the vector.
+	 *
+	 * Shared ptr is used to support efficent operator overloading 
+	 * when a new Vec3 object must be returned:
+	 * vec + vec
+	 * vec - vec
+	 * scalar * vec
+	 *
 	 */
-	float *nums;
+	shared_ptr<float> nums;
 };
 
 
-}
+Vec3 operator*(const float lhs, const Vec3& rhs);
 
+}
 #endif

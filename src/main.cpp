@@ -2,6 +2,7 @@
 #include <iostream>
 #include <gtkmm/window.h>
 #include "Screen.h"
+#include "Vec3.h"
 #include "Mat4.h"
 
 using namespace std;
@@ -18,6 +19,9 @@ int main (int argc, char** argv)
 	Screen screen;
 	window.add(screen);
 	screen.show();
+
+	Mat4 mat {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+	std::cout << mat[14] << std::endl;
 
 	return app->run(window);
 }

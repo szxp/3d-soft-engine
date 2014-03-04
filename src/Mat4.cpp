@@ -2,29 +2,23 @@
 #include "Mat4.h"
 
 using namespace g3d;
+using namespace std;
 
-/**
- * Constructs a matrix from the first 16 elements in the initializer list.
- * Elements with greater index than 15 will be ignored.
- */
-Mat4::Mat4(initializer_list<float> values): nums(new float[16])  {
+Mat4::Mat4(initializer_list<float> values):
+nums( shared_ptr<float>(new float[16], default_delete<float[]>()))
+{
 	int i = 0;
-	for(float f : values) {
-		if (i<16) nums[i++] = f;
+	for(float f : values) 
+	{
+		if (i<16)
+		{
+			*(nums.get() + i++) = f;
+		}
 	}
 }
 
-Mat4::~Mat4() {
-	if (nums) { delete[] nums; }
-
+float &Mat4::operator[] (const int ind) const
+{
+	return *(nums.get() + ind);
 }
 
-float &Mat4::operator[] (const int ind) {
-	return nums[ind];
-}
-
-
-Mat4 &loadLookAtMatrix(Mat4 &res, Vec3 eye, Vec3 target, Vec3 up) {
-
-	return res;
-}
