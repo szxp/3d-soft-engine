@@ -1,35 +1,66 @@
 
 #include "Vec3.h"
 
-using namespace g3d;
-using namespace std;
-
 /**
+ * Constructor
+ *
  * Constructs a vector from the first 3 elements in the initializer list.
  * Elements with greater index than 2 will be ignored.
  */
-Vec3::Vec3(initializer_list<float> values):
-nums(shared_ptr<float>(new float[3], default_delete<float[]>()))
+g3d::Vec3::Vec3(std::initializer_list<float> values):
+nums(new float[size])
 {
 	int i = 0;
 	for(float f : values)
 	{
-		if (i<3)
-		{
-			*(nums.get() + i++) = f;
-		}
+		// skip if the vector is ready
+		// no more elements than the size
+		if (size == i) break;
+
+		nums[i++] = f;
 	}
 }
 
-float &Vec3::operator[] (const int ind) const
+/**
+ * Destructor
+ */
+g3d::Vec3::~Vec3()
 {
-	return *(nums.get() + ind);
+	delete[] nums;
 }
 
-
-Vec3 Vec3::operator-(const Vec3& rhs) const
+/**
+ * Copy constructor
+ */
+g3d::Vec3::Vec3(const g3d::Vec3& other):
+nums(new float[size])
 {
-	Vec3 res {
+	std::copy(other.nums, other.nums + size, nums);
+}
+
+/**
+ * Move constructor
+ */
+g3d::Vec3::Vec3(Vec3&& other): Vec3({0,0,0})
+{
+	swap(*this, other);
+}
+
+/**
+ * Copy assignment operator
+ */
+g3d::Vec3& g3d::Vec3::operator=(Vec3 other)
+{
+	swap(*this, other);
+	return *this;
+}
+
+/**
+ * Vector subtraction.
+ */
+g3d::Vec3 g3d::Vec3::operator-(const g3d::Vec3& rhs) const
+{
+	g3d::Vec3 res {
 		(*this)[0] - rhs[0],
 		(*this)[1] - rhs[1],
 		(*this)[2] - rhs[2]
@@ -37,10 +68,12 @@ Vec3 Vec3::operator-(const Vec3& rhs) const
 	return res;
 }
 
-
-Vec3 Vec3::operator+(const Vec3& rhs) const
+/**
+ * Vector addition.
+ */
+g3d::Vec3 g3d::Vec3::operator+(const g3d::Vec3& rhs) const
 {
-	Vec3 res {
+	g3d::Vec3 res {
 		(*this)[0] + rhs[0],
 		(*this)[1] + rhs[1],
 		(*this)[2] + rhs[2]
@@ -48,41 +81,56 @@ Vec3 Vec3::operator+(const Vec3& rhs) const
 	return res;
 }
 
-
-Vec3 Vec3::operator*(const float rhs) const
+/**
+ * Scalar multiplication: vec * scalar
+ */
+g3d::Vec3 g3d::Vec3::operator*(const float scalar) const
 {
-	Vec3 res {
-		(*this)[0] * rhs,
-		(*this)[1] * rhs,
-		(*this)[2] * rhs
+	g3d::Vec3 res {
+		(*this)[0] * scalar,
+		(*this)[1] * scalar,
+		(*this)[2] * scalar
 	};
 	return res;
 }
 
-Vec3 g3d::operator*(const float lhs, const Vec3& rhs)
+/**
+ * Scalar multiplication: scalar * vec
+ */
+g3d::Vec3 g3d::operator*(const float scalar, const g3d::Vec3& vec)
 {
-	Vec3 res {
-		rhs[0] * lhs,
-		rhs[1] * lhs,
-		rhs[2] * lhs
-	};
-	return res;
+	// avoid code duplication
+	return vec * scalar;
 }
 
-
-Vec3 g3d::normalize(const Vec3& vec)
+/**
+ * Normalizes a vector.
+ */
+g3d::Vec3 g3d::normalize(const g3d::Vec3& vec)
 {
 	float factor = 1 / vec.length();
-	Vec3 res { vec[0] * factor, vec[1] * factor, vec[2] * factor };
+	g3d::Vec3 res { vec[0] * factor, vec[1] * factor, vec[2] * factor };
 	return res;
 }
 
-Vec3 g3d::dotProduct(const Vec3&, const Vec3&)
+/**
+ * Dot product of two vectors.
+ */
+float g3d::dotProduct(const g3d::Vec3& lhs, const g3d::Vec3& rhs)
 {
-
+	return (lhs[0] * rhs[0]) + (lhs[1] * rhs[1]) + (lhs[2] * rhs[2]);
 }
 
-Vec3 g3d::crossProduct(const Vec3&, const Vec3&)
+/**
+ * Cross product of two vectors.
+ */
+g3d::Vec3 g3d::crossProduct(const g3d::Vec3& lhs, const g3d::Vec3& rhs)
 {
-
+	Vec3 res {
+		(lhs[1] * rhs[2]) - (lhs[2] * rhs[1]),
+		(lhs[2] * rhs[0]) - (lhs[0] * rhs[2]),
+		(lhs[0] * rhs[1]) - (lhs[1] * rhs[0])
+	};
+	return res;
 }
+
