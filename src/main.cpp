@@ -4,7 +4,7 @@
 #include "Screen.h"
 
 using namespace std;
-using namespace g3d;
+using namespace g3;
 
 int main (int argc, char** argv)
 {

@@ -1,7 +1,7 @@
 
 #include "Screen.h"
 
-using namespace g3d;
+using namespace g3;
 
 Screen::Screen():
 frontBuffer(Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, 640, 480)),

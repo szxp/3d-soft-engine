@@ -1,7 +1,7 @@
 
 #include "Mat4.h"
 
-using namespace g3d;
+using namespace g3;
 using namespace std;
 
 Mat4::Mat4(initializer_list<float> values):

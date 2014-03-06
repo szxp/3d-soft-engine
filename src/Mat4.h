@@ -6,7 +6,7 @@
 #include <initializer_list>
 #include "Vec3.h"
 
-namespace g3d
+namespace g3
 {
 
 using namespace std;

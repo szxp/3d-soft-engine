@@ -3,11 +3,10 @@
 #define VEC3_H
 
 #include <cstddef>
-#include <initializer_list>
 #include <memory>
 #include <cmath>
 
-namespace g3d
+namespace g3
 {
 
 /**
@@ -17,8 +16,7 @@ class Vec3
 {
 	public:
 	
-	Vec3(std::initializer_list<float> n);
-	~Vec3();
+	Vec3(float x, float y, float z);
 
 	/**
 	 * Copy constructor 
@@ -38,10 +36,7 @@ class Vec3
 	/**
 	 * Subscript operator overloading
 	 */
-	inline float& operator[] (const int ind) const
-	{
-		return nums[ind]; 
-	}
+	const float& operator[] (const int ind) const { return mScalars[ind]; }
 
 	/**
 	 * Vector subtraction.
@@ -62,10 +57,7 @@ class Vec3
 	/**
 	 * Returns the length of the vector.
 	 */
-	inline float length() const
-	{
-		return std::sqrt((nums[0] * nums[0]) + (nums[1] * nums[1]) + (nums[2] * nums[2]));
-	}
+	float length() const { return std::sqrt((mScalars[0] * mScalars[0]) + (mScalars[1] * mScalars[1]) + (mScalars[2] * mScalars[2])); }
 
 	/**
 	 * Swaps two vectors. Used by the assignment operators (copy, move).
@@ -74,7 +66,7 @@ class Vec3
 	{
 		// By swapping the members of two classes,
 		// the two classes are effectively swapped.
-		std::swap(first.nums, second.nums);
+		std::swap(first.mScalars, second.mScalars);
 	}
 
 	private:
@@ -82,12 +74,12 @@ class Vec3
 	/**
 	 * The number of floats in the vector.
 	 */
-	const std::size_t size = 3;
+	static const std::size_t size = 3;
 	
 	/**
 	 * A float array which contains the elements of the vector.
 	 */
-	float* nums;
+	float mScalars[size];
 };
 
 
