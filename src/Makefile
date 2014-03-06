@@ -7,7 +7,7 @@ LDFLAGS=`pkg-config gtkmm-3.0 --libs`
 DEPFILE=.depend
 DEPFILE_TEST=.depend-test
 
-SRCS=Vec3.cpp Mat4.cpp Screen.cpp main.cpp
+SRCS=Vec.cpp Mat4.cpp Screen.cpp main.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 SRCS_TEST=test.cpp
@@ -18,7 +18,7 @@ all: run
 run: $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDFLAGS)
 
-test: Vec3.o Mat4.o $(OBJS_TEST)
+test: Vec.o Mat4.o $(OBJS_TEST)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .depend: $(SRCS)

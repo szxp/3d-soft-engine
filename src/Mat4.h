@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <initializer_list>
-#include "Vec3.h"
+#include "Vec.h"
 
 namespace g3
 {
