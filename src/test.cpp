@@ -21,7 +21,7 @@ int main (int argc, char** argv)
 	Vec3 vec2 {3, 2, -1};
 
 	// vector copy constructor
-	Vec3 copy = vec1;
+	Vec3 copy (vec1);
 	assert( (copy[0]==1) && (copy[1]==2) && (copy[2]==3));
 
 	// vector move constructor
