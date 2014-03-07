@@ -1,6 +1,6 @@
 
 #include "Mat.h"
-
+#include <cmath>
 
 /**
  * Transforms a 3D point with a 4x4 matrix.
@@ -76,6 +76,7 @@ g3::Mat4 g3::createScalingMatrix(const float scaleX, const float scaleY, const f
  * @param valY value to translate by on the y-axis
  * @param valZ value to translate by on the x-axis
  * @return a 4x4 translation matrix
+ * 
  */
 g3::Mat4 g3::createTranslationMatrix(const float valX, const float valY, const float valZ)
 {
@@ -87,4 +88,60 @@ g3::Mat4 g3::createTranslationMatrix(const float valX, const float valY, const f
 	};
 }
 
+/**
+ * Returns a rotation matrix in row major order that can be used to rotate 
+ * a set of vertices around the x-axis.
+ *
+ * @param rad The amount, in radians, in which to rotate around the x-axis.
+ * Note that you can use toRad to convert degrees to radians. 
+ *
+ * @return a 4x4 rotation matrix 
+ */
+g3::Mat4 g3::createRotationXMatrix(const float rad)
+{
+	return Mat4 {
+		1, 0,             0,              0,
+		0, std::cos(rad), -std::sin(rad), 0,
+		0, std::sin(rad), std::cos(rad),  0,
+		0, 0,             0,              1
+	};
+}
+
+/**
+ * Returns a rotation matrix in row major order that can be used to rotate 
+ * a set of vertices around the y-axis.
+ *
+ * @param rad The amount, in radians, in which to rotate around the y-axis.
+ * Note that you can use toRad to convert degrees to radians. 
+ *
+ * @return a 4x4 rotation matrix 
+ */
+g3::Mat4 g3::createRotationYMatrix(const float rad)
+{
+	return Mat4 {
+		std::cos(rad),  0, std::sin(rad), 0,
+		0,              1, 0,             0,
+		-std::sin(rad), 0, std::cos(rad), 0,
+		0,              0, 0,             1
+	};
+}
+
+/**
+ * Returns a rotation matrix in row major order that can be used to rotate 
+ * a set of vertices around the z-axis.
+ *
+ * @param rad The amount, in radians, in which to rotate around the z-axis.
+ * Note that you can use toRad to convert degrees to radians. 
+ *
+ * @return a 4x4 rotation matrix 
+ */
+g3::Mat4 g3::createRotationZMatrix(const float rad)
+{
+	return Mat4 {
+		std::cos(rad), -std::sin(rad), 0, 0,
+		std::sin(rad), std::cos(rad),  0, 0,
+		0,             0,              1, 0,
+		0,             0,              0, 1
+	};
+}
 

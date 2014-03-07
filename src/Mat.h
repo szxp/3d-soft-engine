@@ -1,4 +1,5 @@
 
+
 #ifndef MAT_H
 #define MAT_H
 
@@ -193,9 +194,70 @@ Mat4 createScalingMatrix(const float scaleX, const float scaleY, const float sca
  * @param valX value to translate by on the x-axis
  * @param valY value to translate by on the y-axis
  * @param valZ value to translate by on the x-axis
- * @return a 4x4 translation matrix
+ * @return a 4x4 scaling matrix
  */
 Mat4 createTranslationMatrix(const float valX, const float valY, const float valZ);
+
+/**
+ * PI constant
+ */
+const float PI = 3.14159265358979;
+
+/**
+ * Converts degrees to radians.
+ *
+ * @param deg degress
+ * @return radian value
+ */
+constexpr float toRad(const float deg)
+{
+	return deg * PI / 180.0; 
+}
+
+/**
+ * Converts radians to degrees.
+ *
+ * @param rad radians
+ * @return degree value
+ */
+constexpr float toDeg(const float rad)
+{
+	return rad * 180.0 / PI;
+}
+
+/**
+ * Returns a rotation matrix in row major order that can be used to rotate 
+ * a set of vertices around the x-axis.
+ *
+ * @param rad The amount, in radians, in which to rotate around the x-axis.
+ * Note that you can use toRad to convert degrees to radians. 
+ *
+ * @return a 4x4 rotation matrix 
+ */
+Mat4 createRotationXMatrix(const float rad);
+
+/**
+ * Returns a rotation matrix in row major order that can be used to rotate 
+ * a set of vertices around the y-axis.
+ *
+ * @param rad The amount, in radians, in which to rotate around the y-axis.
+ * Note that you can use toRad to convert degrees to radians. 
+ *
+ * @return a 4x4 rotation matrix 
+ */
+Mat4 createRotationYMatrix(const float rad);
+
+/**
+ * Returns a rotation matrix in row major order that can be used to rotate 
+ * a set of vertices around the z-axis.
+ *
+ * @param rad The amount, in radians, in which to rotate around the z-axis.
+ * Note that you can use toRad to convert degrees to radians. 
+ *
+ * @return a 4x4 rotation matrix 
+ */
+Mat4 createRotationZMatrix(const float rad);
+
 
 /**
  * Load the look-at-matrix (view matrix) based on the camera parameters into the first argument (res).
