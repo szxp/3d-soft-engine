@@ -17,9 +17,9 @@ class Vec
 {
 	public:
 
-	Vec() {}
+	Vec():mScalars{} {}
 
-	Vec(std::initializer_list<float> scalars)
+	Vec(std::initializer_list<float> scalars): mScalars()
 	{
 		std::size_t i = 0;
 		for (float f : scalars)
@@ -32,7 +32,7 @@ class Vec
 	/**
 	 * Copy constructor 
 	 */
-	Vec(const Vec<N>& other)
+	Vec(const Vec<N>& other): mScalars{}
 	{
 		std::copy(other.mScalars, other.mScalars + N, mScalars);
 	}
@@ -40,7 +40,7 @@ class Vec
 	/**
 	 * Move constructor
 	 */
-	Vec(Vec<N>&& other)
+	Vec(Vec<N>&& other): mScalars{}
 	{
 		swap(*this, other);
 	}

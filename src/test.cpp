@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 #include "Vec.h"
-#include "Mat4.h"
+#include "Mat.h"
 
 using namespace std;
 using namespace g3;
@@ -11,12 +11,23 @@ using namespace g3;
 int main (int argc, char** argv)
 {
 
-	// subscript operator
+	// matrix subscript operator
 	initializer_list<float> values {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 	Mat4 mat(values);
 	int i = 0;
 	for(float f : values) { assert(mat[i++]==f); }
 
+	// matrix multiplication
+	Mat2 mul1 {1, 2, 3, 4};
+	Mat2 mul2 {5, 6, 7, 8};
+	Mat2 res = mul1 * mul2;
+	assert( (res[0]==19) && (res[1]==22) && (res[2]==43) && (res[3]==50));
+
+	// matrix scalar multiplication
+	Mat2 dup = mul1 * 2;
+	assert( (dup[0]==2) && (dup[1]==4) && (dup[2]==6) && (dup[3]==8));
+	Mat2 dup2 = 2 * mul2;
+	assert( (dup2[0]==10) && (dup2[1]==12) && (dup2[2]==14) && (dup2[3]==16));
 
 
 	Vec3 vec1 {1, 2, 3};
