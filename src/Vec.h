@@ -174,7 +174,7 @@ template<std::size_t N>
 Vec<N> normalize(const Vec<N>& vec)
 {
 	Vec<N> res;
-	float factor = 1 / vec.length();
+	float factor = N > 0 ? 1 / vec.length() : 1;
 	for (int i = 0; i < N; i++)
 	{
 		res[i] = vec[i] * factor;
