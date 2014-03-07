@@ -176,7 +176,7 @@ Vec3 transformV3(const Vec3& vec, const Mat4& mat);
  * @param scaleX valueto scale by on the all axes.
  * @return a 4x4 uniform scaling matrix
  */
-Mat4 createScalingMatrix(const float scale);
+Mat4 createScaleMatrix(const float scale);
 
 /**
  * Creates a scaling matrix in row major order.
@@ -186,7 +186,7 @@ Mat4 createScalingMatrix(const float scale);
  * @param scaleZ value to scale by on the x-axis
  * @return a 4x4 scaling matrix
  */
-Mat4 createScalingMatrix(const float scaleX, const float scaleY, const float scaleZ);
+Mat4 createScaleMatrix(const float scaleX, const float scaleY, const float scaleZ);
 
 /**
  * Creates a translation matrix in row major order.

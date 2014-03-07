@@ -41,7 +41,7 @@ g3::Vec3 g3::transformV3(const Vec3& vec, const Mat4& mat)
  * @param scale value to scale by on all axes (x,y,z).
  * @return a 4x4 uniform scaling matrix
  */
-g3::Mat4 g3::createScalingMatrix(const float scale)
+g3::Mat4 g3::createScaleMatrix(const float scale)
 {
 	return Mat4 {
 		scale, 0,     0,     0,
@@ -59,7 +59,7 @@ g3::Mat4 g3::createScalingMatrix(const float scale)
  * @param scaleZ value to scale by on the x-axis
  * @return a 4x4 scaling matrix
  */
-g3::Mat4 g3::createScalingMatrix(const float scaleX, const float scaleY, const float scaleZ)
+g3::Mat4 g3::createScaleMatrix(const float scaleX, const float scaleY, const float scaleZ)
 {
 	return Mat4 {
 		scaleX, 0,      0,      0,
