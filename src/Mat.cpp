@@ -75,7 +75,7 @@ g3::Mat4 g3::createScalingMatrix(const float scaleX, const float scaleY, const f
  * @param valX value to translate by on the x-axis
  * @param valY value to translate by on the y-axis
  * @param valZ value to translate by on the x-axis
- * @return a 4x4 scaling matrix
+ * @return a 4x4 translation matrix
  */
 g3::Mat4 g3::createTranslationMatrix(const float valX, const float valY, const float valZ)
 {
