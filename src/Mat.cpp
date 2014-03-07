@@ -33,3 +33,40 @@ g3::Vec3 g3::transformV3(const Vec3& vec, const Mat4& mat)
 		(vec[0] * mat[2]) + (vec[1] * mat[6]) + (vec[2] * mat[10])
 	};
 }
+
+
+/**
+ * Creates a scaling matrix in row major order.
+ *
+ * @param scale value to scale by on all axes (x,y,z).
+ * @return a 4x4 uniform scaling matrix
+ */
+g3::Mat4 g3::createScalingMatrix(const float scale)
+{
+	return Mat4 {
+		scale, 0,     0,     0,
+		0,     scale, 0,     0,
+		0,     0,     scale, 0,
+		0,     0,     0,     1
+	};
+}
+
+/**
+ * Creates a scaling matrix in row major order.
+ *
+ * @param scaleX value to scale by on the x-axis
+ * @param scaleY value to scale by on the y-axis
+ * @param scaleZ value to scale by on the x-axis
+ * @return a 4x4 scaling matrix
+ */
+g3::Mat4 g3::createScalingMatrix(const float scaleX, const float scaleY, const float scaleZ)
+{
+	return Mat4 {
+		scaleX, 0,      0,      0,
+		0,      scaleY, 0,      0,
+		0,      0,      scaleZ, 0,
+		0,      0,      0,      1
+	};
+}
+
+

@@ -34,6 +34,19 @@ int main (int argc, char** argv)
 	loadIdentity(iden);
 	assert( (iden[0]==1) && (iden[1]==0) && (iden[2]==0) && (iden[3]==1));
 
+	// matrix scaling
+	Mat4 scaleMat1 = createScalingMatrix(5);
+	assert( (scaleMat1[0]==5) && (scaleMat1[5]==5) && (scaleMat1[10]==5) && (scaleMat1[15]==1));
+	Mat4 scaleMat2 = createScalingMatrix(3,4,5);
+	assert( (scaleMat2[0]==3) && (scaleMat2[5]==4) && (scaleMat2[10]==5) && (scaleMat1[15]==1));
+
+	// matrix transform point
+	Vec3 point {1,2,3};
+	Mat4 scaleMat = createScalingMatrix(5);
+	Vec3 newPoint = transformP3(point, scaleMat);
+	assert((newPoint[0]==5) && (newPoint[1]==10) && (newPoint[2]==15));
+
+
 	Vec3 vec1 {1, 2, 3};
 	Vec3 vec2 {3, 2, -1};
 
