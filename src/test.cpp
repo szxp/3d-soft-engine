@@ -29,6 +29,10 @@ int main (int argc, char** argv)
 	Mat2 dup2 = 2 * mul2;
 	assert( (dup2[0]==10) && (dup2[1]==12) && (dup2[2]==14) && (dup2[3]==16));
 
+	// matrix loadIdentity
+	Mat2 iden;
+	loadIdentity(iden);
+	assert( (iden[0]==1) && (iden[1]==0) && (iden[2]==0) && (iden[3]==1));
 
 	Vec3 vec1 {1, 2, 3};
 	Vec3 vec2 {3, 2, -1};

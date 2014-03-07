@@ -125,6 +125,23 @@ Mat<N> operator*(const float scalar, const Mat<N>& mat)
 	return mat * scalar;
 }
 
+/**
+ * Replaces a matrix with the identity matrix.
+ */
+template<std::size_t N>
+Mat<N>& loadIdentity(Mat<N>& mat)
+{
+	std::size_t ind = 0;
+	for (std::size_t i = 0; i<N; i++)
+	{
+		for (std::size_t j = 0; j<N; j++)
+		{
+			ind = i*N+j;
+			mat[ind] = (ind % (N+1) == 0) ? 1 : 0;
+		}
+	}
+	return mat;
+}
 
 /**
  * Type alias for a 2x2 dimensional matrix.
