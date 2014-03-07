@@ -46,6 +46,12 @@ int main (int argc, char** argv)
 	Vec3 newPoint = transformP3(point, scaleMat);
 	assert((newPoint[0]==5) && (newPoint[1]==10) && (newPoint[2]==15));
 
+	// matriy translation
+	Vec3 pointModel {1,2,3};
+	Mat4 transMat = createTranslationMatrix(-1, 2, 10);
+	Vec3 transPoint = transformP3(pointModel, transMat);
+	assert((transPoint[0]==0) && (transPoint[1]==4) && (transPoint[2]==13));
+
 
 	Vec3 vec1 {1, 2, 3};
 	Vec3 vec2 {3, 2, -1};

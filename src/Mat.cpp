@@ -69,4 +69,22 @@ g3::Mat4 g3::createScalingMatrix(const float scaleX, const float scaleY, const f
 	};
 }
 
+/**
+ * Creates a translation matrix in row major order.
+ *
+ * @param valX value to translate by on the x-axis
+ * @param valY value to translate by on the y-axis
+ * @param valZ value to translate by on the x-axis
+ * @return a 4x4 scaling matrix
+ */
+g3::Mat4 g3::createTranslationMatrix(const float valX, const float valY, const float valZ)
+{
+	return Mat4 {
+		1,    0,    0,    0,
+		0,    1,    0,    0,
+		0,    0,    1,    0,
+		valX, valY, valZ, 1
+	};
+}
+
 

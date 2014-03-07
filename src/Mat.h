@@ -171,6 +171,7 @@ Vec3 transformV3(const Vec3& vec, const Mat4& mat);
 
 /**
  * Creates a scaling matrix in row major order.
+ *
  * @param scaleX valueto scale by on the all axes.
  * @return a 4x4 uniform scaling matrix
  */
@@ -179,12 +180,22 @@ Mat4 createScalingMatrix(const float scale);
 /**
  * Creates a scaling matrix in row major order.
  *
- * @param scaleX valueto scale by on the x-axis
- * @param scaleY valueto scale by on the y-axis
- * @param scaleZ valueto scale by on the x-axis
+ * @param scaleX value to scale by on the x-axis
+ * @param scaleY value to scale by on the y-axis
+ * @param scaleZ value to scale by on the x-axis
  * @return a 4x4 scaling matrix
  */
 Mat4 createScalingMatrix(const float scaleX, const float scaleY, const float scaleZ);
+
+/**
+ * Creates a translation matrix in row major order.
+ *
+ * @param valX value to translate by on the x-axis
+ * @param valY value to translate by on the y-axis
+ * @param valZ value to translate by on the x-axis
+ * @return a 4x4 scaling matrix
+ */
+Mat4 createTranslationMatrix(const float valX, const float valY, const float valZ);
 
 /**
  * Load the look-at-matrix (view matrix) based on the camera parameters into the first argument (res).
