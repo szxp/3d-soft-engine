@@ -258,11 +258,20 @@ Mat4 createRotationYMatrix(const float rad);
  */
 Mat4 createRotationZMatrix(const float rad);
 
-
 /**
- * Load the look-at-matrix (view matrix) based on the camera parameters into the first argument (res).
+ * Creates a left-handed look-at matrix in row major order.
+ *
+ * @param eye A Vec3 structure that defines the camera point. This value is used
+ * in translation.
+ *
+ * @param target A Vec3 structure that defines the camera look-at target.
+ *
+ * @param up A Vec3 structure that defines the up direction of the current 
+ * world, usually [0, 1, 0].
+ *
+ * @return A left-handed look-at matrix in row major order.
  */
-//Mat4 &loadLookAtMatrixLH(Mat4 &res, Vec3 eye, Vec3 target, Vec3 up);
+Mat4 createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up);
 
 }
 

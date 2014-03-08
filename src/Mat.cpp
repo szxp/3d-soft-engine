@@ -145,3 +145,30 @@ g3::Mat4 g3::createRotationZMatrix(const float rad)
 	};
 }
 
+/**
+ * Creates a left-handed look-at matrix in row major order.
+ *
+ * @param eye A Vec3 structure that defines the camera point. This value is used
+ * in translation.
+ *
+ * @param target A Vec3 structure that defines the camera look-at target.
+ *
+ * @param up A Vec3 structure that defines the up direction of the current 
+ * world, usually [0, 1, 0].
+ *
+ * @return A left-handed look-at matrix in row major order.
+ */
+g3::Mat4 g3::createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up)
+{
+	Vec3 F = g3::normalize(target - eye);
+	Vec3 L = g3::normalize(g3::crossProduct(up, F));
+	Vec3 U = crossProduct(F, L);
+
+	return Mat4 {
+		L[0],                U[0],                F[0],                0,
+		L[1],                U[1],                F[1],                0,
+		L[2],                U[2],                F[2],                0,
+		-dotProduct(L, eye), -dotProduct(L, eye), -dotProduct(L, eye), 1
+	};
+}
+
