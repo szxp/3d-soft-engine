@@ -273,6 +273,20 @@ Mat4 createRotationZMatrix(const float rad);
  */
 Mat4 createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up);
 
+/**
+ * Creates a left-handed perspective projection matrix based on a field of view.
+ *
+ * @param fieldOfViewY Field of view in the y direction, in radians.
+ * @param aspectRatio Aspect ratio, defined as the view space width divided
+ * by height.
+ *
+ * @param zNearPlane Z-value of the near view plane.
+ * @param zFarPlane Z-value of the far view plane.
+ * @return A left-handed perspective projection matrix.
+ */
+Mat4 createPerspectiveFovLHMatrix(float fieldOfViewY, float aspectRatio, float zNearPlane, float zFarPlane);
+
+
 }
 
 #endif

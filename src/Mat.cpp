@@ -172,3 +172,28 @@ g3::Mat4 g3::createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up)
 	};
 }
 
+/**
+ * Creates a left-handed perspective projection matrix in row major order 
+ * based on a field of view.
+ *
+ * @param fieldOfViewY Field of view in the y direction, in radians.
+ * @param aspectRatio Aspect ratio, defined as the view space width divided
+ * by height.
+ *
+ * @param zNearPlane Z-value of the near view plane.
+ * @param zFarPlane Z-value of the far view plane.
+ * @return A left-handed perspective projection matrix.
+ */
+g3::Mat4 g3::createPerspectiveFovLHMatrix(float fieldOfViewY, float aspectRatio, float zNearPlane, float zFarPlane)
+{
+	// cot(x) = tan(PI/2 - x)
+	float h = std::tan((g3::PI/2) - (fieldOfViewY/2));
+	float w = h * aspectRatio;
+
+	return Mat4 {
+		w, 0, 0,                                                0,
+		0, h, 0,                                                0,
+		0, 0, zFarPlane / (zFarPlane - zNearPlane) ,            1,
+		0, 0, -zNearPlane*zFarPlane / (zFarPlane - zNearPlane), 0
+	};
+}
