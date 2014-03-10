@@ -3,14 +3,9 @@
 #define SCREEN_H
 
 #include <gtkmm.h>
-#include <chrono>
 
 namespace g3
 {
-
-typedef std::chrono::high_resolution_clock Clock;
-typedef std::chrono::time_point<Clock> TimePoint;
-typedef std::chrono::microseconds MicroSeconds;
 
 
 /**
@@ -37,18 +32,40 @@ class Screen: public Gtk::DrawingArea {
 
 
 	private:
+
+	/**
+	 * Returns a time point in nanoseconds.
+	 *
+	 * @return Time point in nanoseconds.
+	 */
+	unsigned long clock_time();
+
+	/**
+	 * Front buffer.
+	 */
 	Glib::RefPtr<Gdk::Pixbuf> frontBuffer;
+
+	/**
+	 * Back buffer
+	 */
 	Glib::RefPtr<Gdk::Pixbuf> backBuffer;
 
 	/**
-	 * The target frame time in microseconds.
+	 * The target frame time in nanoseconds.
+	 *
+	 * 30 FPS = 33.3 milliseconds/frame == 33300000 nanoseconds/frame.
 	 */
-	MicroSeconds targetFrameTime;
+	unsigned long targetFrameTime;
 
 	/**
-	 * The time point when the last frame is completed.
+	 * The beginning of a frame.
 	 */
-	TimePoint lastFrameCompleted;
+	unsigned long startFrameTime;
+
+	/**
+	 * The end of a frame.
+	 */
+	unsigned long finishFrameTime;
 
 };
 

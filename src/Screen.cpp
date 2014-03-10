@@ -7,9 +7,10 @@
 g3::Screen::Screen():
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, 640, 480)},
 backBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, 640, 480)},
-targetFrameTime {2000000}, // micro
-lastFrameCompleted {Clock::now()}
+targetFrameTime {33300000}
 {
+	// start frame time
+	startFrameTime = clock_time();
 
 	clear();
 
@@ -42,6 +43,17 @@ bool g3::Screen::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
 	return true;
 }
 
+/**
+ * Returns a time point in nanoseconds.
+ *
+ * @return Time point in nanoseconds.
+ */
+unsigned long g3::Screen::clock_time()
+{
+	timespec ts;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+	return (ts.tv_sec * 1000000000) + ts.tv_nsec;
+}
 
 /**
  * This idle callback function is executed as often as possible, 
@@ -49,20 +61,33 @@ bool g3::Screen::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
  */
 bool g3::Screen::on_idle()
 {
-	TimePoint now = Clock::now();
-	auto elapsed = std::chrono::duration_cast<MicroSeconds>(now - lastFrameCompleted);
-	std::cout << "Elapsed: " << elapsed.count() << std::endl;
-	lastFrameCompleted = now;
+	// finish current frame
+	finishFrameTime = clock_time();
 
-	// sleep
-	MicroSeconds wait {(elapsed <= targetFrameTime)
-		? (targetFrameTime - elapsed) + targetFrameTime
-		: targetFrameTime - (elapsed % targetFrameTime)};
+	// The elapsed frame time in nanoseconds.
+	unsigned long elapsed = finishFrameTime - startFrameTime;
 
-	std::cout << "Sleep for: " << wait.count() << std::endl;
-	std::this_thread::sleep_for( wait );
+	//std::cout << "Elapsed: " << "Finish: " << finishFrameTime << " | start: " << startFrameTime << " | elapsed: " << elapsed << std::endl;
 
-	queue_draw();
+	if (elapsed <= targetFrameTime)
+	{
+		// sleep
+		std::chrono::duration<float, std::nano> wait { targetFrameTime - elapsed };
+		//std::cout << "Sleep for: " << wait.count() << std::endl;
+		std::this_thread::sleep_for( wait );
+
+		// redraw only if we were too fast in the prevoius frame.
+		queue_draw();
+	}
+	else
+	{
+		// Here we were too slow so we will skip the next redrawing.
+		std::cout << "Frame dropping: " << elapsed << std::endl;
+
+	}
+	
+	// start new frame
+	startFrameTime = clock_time();
 
 	return true;
 }
