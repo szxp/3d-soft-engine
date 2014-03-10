@@ -1,5 +1,5 @@
 3d-graphics-engine
 ==================
 
-The implementation of the graphics pipeline is purely software only for educational purposes.
+This project is an implementation of the graphics pipeline in software only for educational purposes.
 
