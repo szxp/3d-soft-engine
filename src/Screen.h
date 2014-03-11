@@ -46,11 +46,6 @@ class Screen: public Gtk::DrawingArea {
 	Glib::RefPtr<Gdk::Pixbuf> frontBuffer;
 
 	/**
-	 * Back buffer
-	 */
-	Glib::RefPtr<Gdk::Pixbuf> backBuffer;
-
-	/**
 	 * The target frame time in nanoseconds.
 	 *
 	 * 30 FPS = 33.3 milliseconds/frame == 33300000 nanoseconds/frame.

@@ -6,7 +6,6 @@
 
 g3::Screen::Screen():
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, 640, 480)},
-backBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, 640, 480)},
 targetFrameTime {33300000}
 {
 	// start frame time
@@ -22,10 +21,8 @@ targetFrameTime {33300000}
 void g3::Screen::clear()
 {
 	// Fill the buffer with color white
-	frontBuffer->fill(0xffffffff);
+	frontBuffer->fill(0x0f3ff0ff);
 	
-	// Fill the buffer with color white
-	backBuffer->fill(0xffffffff);
 }
 
 bool g3::Screen::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
