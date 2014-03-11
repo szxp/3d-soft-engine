@@ -61,16 +61,13 @@ bool g3::Screen::on_idle()
 	// finish current frame
 	finishFrameTime = clock_time();
 
-	// The elapsed frame time in nanoseconds.
-	unsigned long elapsed = finishFrameTime - startFrameTime;
+	// The amount of time that the frame spent in nanoseconds.
+	unsigned long timeSpentInFrame = finishFrameTime - startFrameTime;
 
-	//std::cout << "Elapsed: " << "Finish: " << finishFrameTime << " | start: " << startFrameTime << " | elapsed: " << elapsed << std::endl;
-
-	if (elapsed <= targetFrameTime)
+	if (timeSpentInFrame <= targetFrameTime)
 	{
 		// sleep
-		std::chrono::duration<float, std::nano> wait { targetFrameTime - elapsed };
-		//std::cout << "Sleep for: " << wait.count() << std::endl;
+		std::chrono::duration<float, std::nano> wait { targetFrameTime - timeSpentInFrame };
 		std::this_thread::sleep_for( wait );
 
 		// redraw only if we were too fast in the prevoius frame.
@@ -79,12 +76,14 @@ bool g3::Screen::on_idle()
 	else
 	{
 		// Here we were too slow so we will skip the next redrawing.
-		std::cout << "Frame dropping: " << elapsed << std::endl;
-
+		std::cout << "Frame dropping: " << timeSpentInFrame << std::endl;
 	}
 	
 	// start new frame
 	startFrameTime = clock_time();
+
+	// Elapsed time calculation between two frames goes here
+	// ...
 
 	return true;
 }
