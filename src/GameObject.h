@@ -10,7 +10,7 @@ namespace g3
  ******************************************************************************/
 class GameObject
 {
-
+	virtual ~GameObject() {}
 
 }; // class GameObject
 
@@ -26,6 +26,7 @@ class Updatable
 	 * @param deltaTime The elapsed delta time since the last update.
 	 */
 	virtual void update(float deltaTime) = 0;
+	virtual ~Updatable() {}
 
 }; // class Updatable
 
@@ -39,6 +40,7 @@ class Drawable
 	 * Called when an object need to be drawn.
 	 */
 	virtual void draw() = 0;
+	virtual ~Drawable() {}
 
 }; // class Drawable
 
@@ -48,6 +50,7 @@ class Drawable
  ******************************************************************************/
 class UGameObject: public GameObject, public Updatable
 {
+	virtual ~UGameObject() {}
 
 }; // class UGameObject
 
@@ -57,6 +60,7 @@ class UGameObject: public GameObject, public Updatable
  ******************************************************************************/
 class DGameObject: public GameObject, public Drawable
 {
+	virtual ~DGameObject() {}
 
 }; // class DGameObject
 
@@ -66,6 +70,7 @@ class DGameObject: public GameObject, public Drawable
  ******************************************************************************/
 class DUGameObject: public UGameObject, public Drawable
 {
+	virtual ~DUGameObject() {}
 
 }; // class DUGameObject
 
