@@ -77,8 +77,9 @@ void g3::Screen::render()
 		//std::cout << v[0] << ", " << v[1] << ", " << v[2] << std::endl;
 
 		// transform point to window coordinate system
-		int x = (v[0] * width) + (width / 2);
-		int y = (-v[1] * height) + (height / 2);
+		int min = std::min(width, height);
+		int x = (v[0] * min ) + (width / 2.0f);
+		int y = (-v[1] * min ) + (height / 2.0f);
 
 		drawPoint(x, y);
 	}
