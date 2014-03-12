@@ -6,7 +6,8 @@
 
 g3::Screen::Screen():
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, 640, 480)},
-targetFrameTime {33300000}
+targetFrameTime {33300000},
+camera { Vec3{10, 10, 10}, Vec3{0, 0, 0} }
 {
 	// start frame time
 	startFrameTime = clock_time();
@@ -15,6 +16,8 @@ targetFrameTime {33300000}
 
 	// register idle function
 	Glib::signal_idle().connect(sigc::mem_fun(*this, &Screen::on_idle));
+	
+
 }
 
 

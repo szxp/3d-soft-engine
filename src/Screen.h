@@ -3,6 +3,8 @@
 #define SCREEN_H
 
 #include <gtkmm.h>
+#include "Camera.h"
+#include "Mesh.h"
 
 namespace g3
 {
@@ -61,6 +63,16 @@ class Screen: public Gtk::DrawingArea {
 	 * The end of a frame.
 	 */
 	unsigned long finishFrameTime;
+
+	/**
+	 * The camera that we look from.
+	 */
+	Camera camera;
+
+	/**
+	 * The cube model.
+	 */
+	Cube cube;
 
 };
 
