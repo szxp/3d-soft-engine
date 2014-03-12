@@ -30,7 +30,9 @@ template<std::size_t N, std::size_t M, typename F>
 struct Mesh
 {
 	Vec3 vertices[N];
-	F polygons[M];
+	std::size_t nVertices = N;
+	F faces[M];
+	std::size_t nFaces = M;
 }; // struct Mesh
 
 /*******************************************************************************
