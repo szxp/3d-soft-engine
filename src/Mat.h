@@ -7,6 +7,7 @@
 #include <memory>
 #include <initializer_list>
 #include "Vec.h"
+#include <iostream>
 
 namespace g3
 {
@@ -271,7 +272,7 @@ Mat4 createRotationZMatrix(const float rad);
  *
  * @return A left-handed look-at matrix in row major order.
  */
-Mat4 createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up);
+Mat4 createLookAtLHMatrix(const Vec3& eye, const Vec3& target, const Vec3& up);
 
 /**
  * Creates a left-handed perspective projection matrix based on a field of view.
@@ -285,6 +286,28 @@ Mat4 createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up);
  * @return A left-handed perspective projection matrix.
  */
 Mat4 createPerspectiveFovLHMatrix(float fieldOfViewY, float aspectRatio, float zNearPlane, float zFarPlane);
+
+/**
+ * Prints the matrix in four rows.
+ */
+template<std::size_t N>
+std::ostream& operator<<(std::ostream& out, const Mat<N>& mat)
+{
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			out << mat[i*N+j] << ", ";
+		}
+
+		if (i < N-1)
+		{
+			out << std::endl;
+		}
+	}
+
+	return out;
+}	
 
 
 }

@@ -158,7 +158,7 @@ g3::Mat4 g3::createRotationZMatrix(const float rad)
  *
  * @return A left-handed look-at matrix in row major order.
  */
-g3::Mat4 g3::createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up)
+g3::Mat4 g3::createLookAtLHMatrix(const Vec3& eye, const Vec3& target, const Vec3& up)
 {
 	Vec3 F = g3::normalize(target - eye);
 	Vec3 L = g3::normalize(g3::crossProduct(up, F));
@@ -168,7 +168,7 @@ g3::Mat4 g3::createLookAtLHMatrix(Vec3 eye, Vec3 target, Vec3 up)
 		L[0],                U[0],                F[0],                0,
 		L[1],                U[1],                F[1],                0,
 		L[2],                U[2],                F[2],                0,
-		-dotProduct(L, eye), -dotProduct(L, eye), -dotProduct(L, eye), 1
+		-dotProduct(L, eye), -dotProduct(U, eye), -dotProduct(F, eye), 1
 	};
 }
 
@@ -191,9 +191,9 @@ g3::Mat4 g3::createPerspectiveFovLHMatrix(float fieldOfViewY, float aspectRatio,
 	float w = h * aspectRatio;
 
 	return Mat4 {
-		w, 0, 0,                                                0,
-		0, h, 0,                                                0,
-		0, 0, zFarPlane / (zFarPlane - zNearPlane) ,            1,
-		0, 0, -zNearPlane*zFarPlane / (zFarPlane - zNearPlane), 0
+		w, 0, 0,                                                  0,
+		0, h, 0,                                                  0,
+		0, 0, zFarPlane / (zFarPlane - zNearPlane) ,              1,
+		0, 0, (-zNearPlane*zFarPlane) / (zFarPlane - zNearPlane), 0
 	};
 }

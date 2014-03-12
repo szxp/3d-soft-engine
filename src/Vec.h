@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <memory>
 #include <cmath>
+#include <iostream>
 
 namespace g3
 {
@@ -200,6 +201,27 @@ float dotProduct(const Vec<N>& lhs, const Vec<N>& rhs)
  * Cross product of two vectors, specifically for only 3D vectors. 
  */
 Vec3 crossProduct(const Vec3&, const Vec3&);
+
+
+
+/**
+ * Prints the vector.
+ */
+template<std::size_t N>
+std::ostream& operator<<(std::ostream& out, const Vec<N>& vec)
+{
+	for (int i = 0; i < N; i++)
+	{
+		if (i > 0)
+		{
+			out << ", ";
+		}
+		out << vec[i];
+	}
+
+	return out;
+}	
+
 
 }
 #endif

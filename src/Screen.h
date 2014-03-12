@@ -16,7 +16,7 @@ namespace g3
 class Screen: public Gtk::DrawingArea {
 
 	public:
-	Screen();
+	Screen(const int w, const int h);
 	virtual ~Screen(){};
 	
 	/**
@@ -32,8 +32,17 @@ class Screen: public Gtk::DrawingArea {
 
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 
-
 	private:
+
+	/**
+	 * Renders the scene.
+	 */
+	void render();
+
+	/**
+	 * Draws a point on the screen.
+	 */
+	void drawPoint(int x, int y);
 
 	/**
 	 * Returns a time point in nanoseconds.
@@ -41,6 +50,16 @@ class Screen: public Gtk::DrawingArea {
 	 * @return Time point in nanoseconds.
 	 */
 	unsigned long clock_time();
+
+	/**
+	 * The width of the screen.
+	 */
+	int width;
+
+	/**
+	 * The height of the screen
+	 */
+	int height;
 
 	/**
 	 * Front buffer.
@@ -73,6 +92,12 @@ class Screen: public Gtk::DrawingArea {
 	 * The cube model.
 	 */
 	Cube cube;
+
+
+	/**
+	 * Rotation velocity around y axis.
+	 */
+	float rotationY;
 
 };
 
