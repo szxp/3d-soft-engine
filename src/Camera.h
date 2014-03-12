@@ -22,6 +22,12 @@ struct Camera
 	 */
 	Vec3 target;
 
+	/**
+	 * Zoom factor 
+	 */
+	float zoomFactor;
+
+
 }; // class Camera
 
 

@@ -5,12 +5,12 @@
 #include <chrono>
 #include "Mat.h"
 
-g3::Screen::Screen(const int w, const int h):
+g3::Screen::Screen(unsigned int w, unsigned int h):
 width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
 targetFrameTime {33300000},
-camera { Vec3{10, 10, -10}, Vec3{0, 0, 0} },
+camera { Vec3{10, 10, -10}, Vec3{0, 0, 0}, 400 },
 rotationY {0},
 cube {
 	{ {{-1,1,1}}, {{1,1,1}}, {{-1,-1,1}}, {{-1,-1,-1}},{{-1,1,-1}}, {{1,1,-1}}, {{1,-1,1}}, {{1,-1,-1}} }
@@ -23,19 +23,49 @@ cube {
 	startFrameTime = clock_time();
 
 	clear();
+	
+	// enable mouse wheel detection
+	add_events(Gdk::BUTTON_PRESS_MASK | Gdk::SCROLL_MASK);
 
 	// register idle function
 	Glib::signal_idle().connect(sigc::mem_fun(*this, &Screen::on_idle));
+
+
 }
 
 
+/**
+ * Clears the backbuffer.
+ */
 void g3::Screen::clear()
 {
 	// Fill the buffer with color white
-	frontBuffer->fill(0x0f3ff0ff);
+	frontBuffer->fill(0x000000ff);
 	
 }
 
+/**
+ * Detects mouse wheel movements. Called by the GUI.
+ */
+bool g3::Screen::on_scroll_event(GdkEventScroll* event)
+{
+	float zoomFactorPercent = 0.1;
+
+	if (event->direction == GdkScrollDirection::GDK_SCROLL_UP)
+	{
+		camera.zoomFactor += camera.zoomFactor * zoomFactorPercent;
+	}
+	else
+	{
+		camera.zoomFactor -= camera.zoomFactor * zoomFactorPercent;
+	}
+
+	return true;
+}
+
+/**
+ * The drawing function, called by the GUI.
+ */
 bool g3::Screen::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
 	
 	//Gtk::Allocation allocation = get_allocation();
@@ -77,9 +107,8 @@ void g3::Screen::render()
 		//std::cout << v[0] << ", " << v[1] << ", " << v[2] << std::endl;
 
 		// transform point to window coordinate system
-		int min = std::min(width, height);
-		int x = (v[0] * min ) + (width / 2.0f);
-		int y = (-v[1] * min ) + (height / 2.0f);
+		int x = (v[0] * camera.zoomFactor ) + (width / 2.0f);
+		int y = (-v[1] * camera.zoomFactor ) + (height / 2.0f);
 
 		drawPoint(x, y);
 	}

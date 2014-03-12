@@ -16,11 +16,11 @@ namespace g3
 class Screen: public Gtk::DrawingArea {
 
 	public:
-	Screen(const int w, const int h);
+	Screen(unsigned int w, unsigned int h);
 	virtual ~Screen(){};
 	
 	/**
-	 * Clears the buffer.
+	 * Clears the backbuffer.
 	 */
 	void clear();
 
@@ -30,7 +30,15 @@ class Screen: public Gtk::DrawingArea {
 	 */
 	bool on_idle();
 
+	/**
+	 * The drawing function, called by the GUI.
+	 */
 	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+
+	/**
+	 * Detects mouse wheel movements. Called by the GUI.
+	 */
+	virtual bool on_scroll_event(GdkEventScroll* event);
 
 	private:
 
@@ -54,12 +62,12 @@ class Screen: public Gtk::DrawingArea {
 	/**
 	 * The width of the screen.
 	 */
-	int width;
+	unsigned int width;
 
 	/**
 	 * The height of the screen
 	 */
-	int height;
+	unsigned int height;
 
 	/**
 	 * Front buffer.
