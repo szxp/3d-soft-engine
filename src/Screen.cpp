@@ -9,13 +9,20 @@ g3::Screen::Screen(unsigned int w, unsigned int h):
 width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
-targetFrameTime {33300000},
-camera { Vec3{10, 10, -10}, Vec3{0, 0, 0}, 400 },
+targetFrameTime {16670000},
+camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 },
 rotationY {0},
 cube {
-	{ {{-1,1,1}}, {{1,1,1}}, {{-1,-1,1}}, {{-1,-1,-1}},{{-1,1,-1}}, {{1,1,-1}}, {{1,-1,1}}, {{1,-1,-1}} }
+	{
+		{{-1,1,1}}, {{-1,1,-1}}, {{1,1,-1}}, {{1,1,1}}
+		,{{-1,-1,1}}, {{-1,-1,-1}}, {{1,-1,-1}}, {{1,-1,1}}
+	}
 	,8
-	,{ {{0,1,2}}, {{1,2,3}}, {{1,3,6}}, {{1,5,6}}, {{0,1,4}}, {{1,4,5}}, {{2,3,7}}, {{3,6,7}}, {{0,2,7}}, {{0,4,7}}, {{4,5,6}}, {{4,6,7}} }
+	,{ 
+		{{0,1,2}}, {{2,3,0}}, {{4,5,6}}, {{6,7,4}}
+		,{{0,5,1}}, {{0,4,5}}, {{3,6,7}}, {{3,2,6}}
+		,{{1,5,6}}, {{1,6,2}}, {{0,7,3}}, {{0,4,7}} 
+	}
 	,12
 }
 {
@@ -95,37 +102,69 @@ void g3::Screen::render()
 	Mat4 worldMatrix = g3::createScaleMatrix(1) * g3::createRotationYMatrix(rotationY);
 	Mat4 transformMatrix = worldMatrix * viewMatrix * projectionMatrix;
 
-	//std::size_t nFaces = cube.nFaces;
+	std::size_t nFaces = cube.nFaces;
+	for (int i = 0; i < nFaces; i++)
+	{
+		Vec3 v[3];
+		int mapToWin[6];
+		
+		for (int j = 0; j < 3; j++)
+		{
+			v[j] = transformP3( cube.vertices[ cube.faces[i].indices[j] ], transformMatrix );
+			
+			mapToWin[2*j]   = (( v[j][0] * camera.zoomFactor / (width/(float)height) ) + (width / 2.0f));
+			mapToWin[2*j+1] = ((-v[j][1] * camera.zoomFactor ) + (height / 2.0f));
+		}
+
+		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3]);
+		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5]);
+		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1]);
+	}
+
+	/*
 	std::size_t nVertices = cube.nVertices;
 	for (int i = 0; i < nVertices; i++)
 	{
-
-		//std::cout << "Orig vec3: "<< cube.vertices[i][0] << ", " << cube.vertices[i][1] << ", " << cube.vertices[i][2] << std::endl;
-
-		Vec3 v = transformP3( cube.vertices[i], transformMatrix );
 		
-		//std::cout << v[0] << ", " << v[1] << ", " << v[2] << std::endl;
-
-		// transform point to window coordinate system
-		int x = (v[0] * camera.zoomFactor ) + (width / 2.0f);
-		int y = (-v[1] * camera.zoomFactor ) + (height / 2.0f);
-
+		Vec3 v = transformP3( cube.vertices[ i ], transformMatrix );
+		int x  = ( v[0] * camera.zoomFactor / (width/(float)height) ) + (width / 2);
+		int y  = (-v[1] * camera.zoomFactor ) + (height / 2);
 		drawPoint(x, y);
 	}
-
+	*/
 }
 
+/**
+ * Draws a line.
+ */
+void g3::Screen::drawLine(int x0, int y0, int x1, int y1)
+{
+	int dx = std::abs(x1 - x0);
+	int dy = std::abs(y1 - y0);
+	int sx = (x0 < x1) ? 1 : -1;
+	int sy = (y0 < y1) ? 1 : -1;
+
+	int err = dx - dy;
+
+	while (true)
+	{
+		drawPoint(x0, y0);
+
+		if ((x0 == x1) && (y0 == y1)) break;
+		int e2 = 2 * err;
+		if (e2 > -dy) { err -= dy; x0 += sx; }
+		if (e2 < dx) { err += dx; y0 += sy; }
+	}
+}
 
 /**
  * Draws a point on the screen.
  */
 void g3::Screen::drawPoint(int x, int y)
 {
-	//std::cout << x << ", " << y << std::endl;
 
 	if ((x >= 0) && (y >=0) && (x < width) && (y < height))
 	{
-
 		int offset  = y * frontBuffer->get_rowstride() + x * frontBuffer->get_n_channels();
 		guchar* pixel = &frontBuffer->get_pixels()[ offset ];
 
@@ -180,6 +219,7 @@ bool g3::Screen::on_idle()
 	// Elapsed time calculation between two frames goes here
 	// ...
 
+	// Rotates the cube around the y axis.
 	rotationY += 0.01;
 
 	return true;

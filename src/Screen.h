@@ -11,7 +11,7 @@ namespace g3
 
 
 /**
- * Represents a 2D screen. It uses double buffering.
+ * Implements the graphics pipeline.
  */
 class Screen: public Gtk::DrawingArea {
 
@@ -51,6 +51,11 @@ class Screen: public Gtk::DrawingArea {
 	 * Draws a point on the screen.
 	 */
 	void drawPoint(int x, int y);
+
+	/**
+	 * Draws a line.
+	 */
+	void drawLine(int x0, int y0, int x1, int y1);
 
 	/**
 	 * Returns a time point in nanoseconds.
