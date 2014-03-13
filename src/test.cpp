@@ -13,6 +13,13 @@ using namespace g3;
 
 int main (int argc, char** argv)
 {
+	// *********************************************************************
+	// !!! WARNING !!!
+	//
+	// A note to me. Comparing floating point numbers is not a good idea. :(
+	//
+	// *********************************************************************
+
 	// Quaternion multiplication
 	Vec3 axisY {0, 1, 0};
 	Vec3 axisX {1, 0, 0};
@@ -22,9 +29,6 @@ int main (int argc, char** argv)
 	assert (magnitude(q1) == 1 );
 	assert (magnitude(q2) == 1 );
 	assert (magnitude(q3) == 1 );
-
-
-
 	
 
 	// matrix subscript operator
