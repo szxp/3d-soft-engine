@@ -4,12 +4,13 @@
 #include <thread>
 #include <chrono>
 #include "Mat.h"
+#include "Quaternion.h"
 
 g3::Screen::Screen(unsigned int w, unsigned int h):
 width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
-targetFrameTime {16670000},
+targetFrameTime {33300000},
 camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 },
 rotationY {0},
 cube {
@@ -56,7 +57,7 @@ void g3::Screen::clear()
  */
 bool g3::Screen::on_scroll_event(GdkEventScroll* event)
 {
-	float zoomFactorPercent = 0.1;
+	float zoomFactorPercent = 0.05;
 
 	if (event->direction == GdkScrollDirection::GDK_SCROLL_UP)
 	{
@@ -99,7 +100,10 @@ void g3::Screen::render()
 	Mat4 viewMatrix = g3::createLookAtLHMatrix(camera.eye, camera.target, upWorld);
 	Mat4 projectionMatrix = g3::createPerspectiveFovLHMatrix(0.78f, width / (float)height, 0.01f, 25.0f);
 
-	Mat4 worldMatrix = g3::createScaleMatrix(1) * g3::createRotationYMatrix(rotationY);
+	Vec3 axisY {0, 1, 0};
+	Quaternion rotQ = g3::createQuaternion(axisY, rotationY);
+	Mat4 worldMatrix = g3::createScaleMatrix(1) * g3::createRotationMatrix(rotQ);
+
 	Mat4 transformMatrix = worldMatrix * viewMatrix * projectionMatrix;
 
 	std::size_t nFaces = cube.nFaces;
@@ -112,8 +116,8 @@ void g3::Screen::render()
 		{
 			v[j] = transformP3( cube.vertices[ cube.faces[i].indices[j] ], transformMatrix );
 			
-			mapToWin[2*j]   = (( v[j][0] * camera.zoomFactor / (width/(float)height) ) + (width / 2.0f));
-			mapToWin[2*j+1] = ((-v[j][1] * camera.zoomFactor ) + (height / 2.0f));
+			mapToWin[2*j]   = ( v[j][0] * camera.zoomFactor / (width/(float)height)  ) + (width / 2.0f);
+			mapToWin[2*j+1] = (-v[j][1] * camera.zoomFactor ) + (height / 2.0f);
 		}
 
 		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3]);
@@ -170,7 +174,7 @@ void g3::Screen::drawPoint(int x, int y)
 
 		pixel[0]=255;
 		pixel[1]=255;
-		pixel[2]=255;
+		pixel[2]=0;
 	}
 }
 
@@ -219,7 +223,7 @@ bool g3::Screen::on_idle()
 	// Elapsed time calculation between two frames goes here
 	// ...
 
-	// Rotates the cube around the y axis.
+	// Rotates the cube around the y axis in radians.
 	rotationY += 0.01;
 
 	return true;

@@ -4,12 +4,28 @@
 #include <utility>
 #include "Vec.h"
 #include "Mat.h"
+#include "Quaternion.h"
 
 using namespace std;
 using namespace g3;
 
+
+
 int main (int argc, char** argv)
 {
+	// Quaternion multiplication
+	Vec3 axisY {0, 1, 0};
+	Vec3 axisX {1, 0, 0};
+	Quaternion q1 = createQuaternion(axisY, g3::toRad(43.2));
+	Quaternion q2 = createQuaternion(axisX, g3::toRad(63.1));
+	Quaternion q3 = q1 * q2;
+	assert (magnitude(q1) == 1 );
+	assert (magnitude(q2) == 1 );
+	assert (magnitude(q3) == 1 );
+
+
+
+	
 
 	// matrix subscript operator
 	initializer_list<float> values {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};

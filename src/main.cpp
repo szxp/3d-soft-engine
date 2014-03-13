@@ -12,8 +12,8 @@ int main (int argc, char** argv)
 	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv);
 
 	Gtk::Window window;
-	const int width = 1280;
-	const int height = 800;
+	const int width = 640;
+	const int height = 480;
 	window.set_default_size(width, height);
         
 	Screen screen (width, height);

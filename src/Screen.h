@@ -108,7 +108,7 @@ class Screen: public Gtk::DrawingArea {
 
 
 	/**
-	 * Rotation velocity around y axis.
+	 * Rotation velocity around y axis in radians.
 	 */
 	float rotationY;
 
