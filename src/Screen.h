@@ -104,13 +104,7 @@ class Screen: public Gtk::DrawingArea {
 	/**
 	 * The cube model.
 	 */
-	Cube cube;
-
-
-	/**
-	 * Rotation velocity around y axis in radians.
-	 */
-	float rotationY;
+	TriangleMesh cube;
 
 };
 

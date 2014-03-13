@@ -4,36 +4,101 @@
 
 #include <cstddef>
 #include "Vec.h"
+#include "Mat.h"
+#include "Quaternion.h"
+#include <memory>
 
 namespace g3 
 {
 
+/**
+ * The information we store at the vertex level.
+ */
+struct Vertex
+{
+	/**
+	 * 3D position of the vertex.
+	 */
+	Vec3 pos;
 
-/*******************************************************************************
- * Describes a triangle with 3 indices. Indices refer to vertices of a Mesh.
- ******************************************************************************/
+	// Other information could include:
+	// texture mapping coordinates, a surface normal,
+	// lighting values, etc.
+
+}; // struct Vertex
+
+
+/**
+ * The information we store at the triangle level.
+ */
 struct Triangle
 {
-	std::size_t indices[3];
-};
+	/**
+	 * Indices into the vertex list.
+	 * In practice 16-bit indices are almost always used than 32-bit,
+	 * to save memory and bandwith.
+	 */
+	unsigned int vertexIndex[3];
 
-/*******************************************************************************
- * Describes a general mesh with N vertices and M triangles.
- ******************************************************************************/
-template<std::size_t N, std::size_t M>
-struct Mesh
+	// Other information could include:
+	// a normal, material information, etc
+
+}; // struct Triangle
+
+
+/**
+ * Stores an indexed triangle mesh with N vertices and M triangles.
+ */
+struct TriangleMesh
 {
-	Vec3 vertices[N];
-	std::size_t nVertices;
-	Triangle faces[M];
-	std::size_t nFaces;
-}; // struct Mesh
+	/**
+	 * The number of vertices.
+	 */
+	unsigned int nVertices;
 
-/*******************************************************************************
- * Cube is a concrete Mesh with 8 vertices and 12 Triangle faces.
- ******************************************************************************/
-using Cube = Mesh<8, 12>;
+	/**
+	 * The vertex list.
+	 */
+	std::unique_ptr<Vertex[]> vertices;
 
+	/**
+	 * The number of triangles.
+	 */
+	unsigned int nFaces;
+
+	/**
+	 * The triangle list.
+	 */
+	std::unique_ptr<Triangle[]> faces;
+
+	/**
+	 * The rotation angle around the x axis in radians.
+	 */
+	float rotationX;
+
+	/**
+	 * The rotation angle around the y axis in radians.
+	 */
+	float rotationY;
+	
+	/**
+	 * The rotation angle around the z axis in radians.
+	 */
+	float rotationZ;
+
+}; // struct TriangleMesh
+
+
+/**
+ * Loads a cube triangle mesh.
+ */
+void loadCube(TriangleMesh& mesh);
+
+
+/**
+ * Calculates the world transformation matrix of the triangle mesh object.
+ */
+Mat4 getWorldMatrix(TriangleMesh& mesh);
 
 
 } // namespace g3

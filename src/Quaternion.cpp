@@ -18,7 +18,7 @@ g3::Quaternion g3::createQuaternion(const g3::Vec3& axis, const float rad)
 
 	return {
 		{ norm[0] * factor, norm[1] * factor, norm[2] * factor },
-		std::cos(rad/2)
+		std::cos(rad/2.0f)
 	};
 }
 
@@ -82,9 +82,9 @@ g3::Mat4 g3::createRotationMatrix(const g3::Quaternion& q)
 	float w = q.s;
 
 	return {
-		1-(2*y*y)-(2*z*z), (2*x*y)-(2*w*z),         (2*x*z)+(2*w*y),    0,
-		(2*x*y)+(2*w*z),   (w*w)-(x*x)+(y*y)-(z*z), (2*y*z)+(2*w*x),    0,
-		(2*x*z)-(2*w*y),   (2*y*z)-(2*w*x),          1-(2*x*x)-(2*y*y), 0,
-		0,                 0,                        0,                 1
+		1-(2*y*y)-(2*z*z), (2*x*y)-(2*w*z),   (2*x*z)+(2*w*y),   0,
+		(2*x*y)+(2*w*z),   1-(2*x*x)-(2*z*z), (2*y*z)+(2*w*x),   0,
+		(2*x*z)-(2*w*y),   (2*y*z)-(2*w*x),   1-(2*x*x)-(2*y*y), 0,
+		0,                 0,                 0,                 1
 	};
 }

@@ -5,28 +5,17 @@
 #include <chrono>
 #include "Mat.h"
 #include "Quaternion.h"
+#include "Mesh.h"
 
 g3::Screen::Screen(unsigned int w, unsigned int h):
 width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
 targetFrameTime {33300000},
-camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 },
-rotationY {0},
-cube {
-	{
-		{{-1,1,1}}, {{-1,1,-1}}, {{1,1,-1}}, {{1,1,1}}
-		,{{-1,-1,1}}, {{-1,-1,-1}}, {{1,-1,-1}}, {{1,-1,1}}
-	}
-	,8
-	,{ 
-		{{0,1,2}}, {{2,3,0}}, {{4,5,6}}, {{6,7,4}}
-		,{{0,5,1}}, {{0,4,5}}, {{3,6,7}}, {{3,2,6}}
-		,{{1,5,6}}, {{1,6,2}}, {{0,7,3}}, {{0,4,7}} 
-	}
-	,12
-}
+camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 }
 {
+	g3::loadCube(cube);
+
 	// start frame time
 	startFrameTime = clock_time();
 
@@ -99,22 +88,16 @@ void g3::Screen::render()
 	Vec3 upWorld {0,1,0};
 	Mat4 viewMatrix = g3::createLookAtLHMatrix(camera.eye, camera.target, upWorld);
 	Mat4 projectionMatrix = g3::createPerspectiveFovLHMatrix(0.78f, width / (float)height, 0.01f, 25.0f);
+	Mat4 transformMatrix = g3::getWorldMatrix(cube) * viewMatrix * projectionMatrix;
 
-	Vec3 axisY {0, 1, 0};
-	Quaternion rotQ = g3::createQuaternion(axisY, rotationY);
-	Mat4 worldMatrix = g3::createScaleMatrix(1) * g3::createRotationMatrix(rotQ);
-
-	Mat4 transformMatrix = worldMatrix * viewMatrix * projectionMatrix;
-
-	std::size_t nFaces = cube.nFaces;
-	for (int i = 0; i < nFaces; i++)
+	for (unsigned int i = 0; i < cube.nFaces; i++)
 	{
 		Vec3 v[3];
 		int mapToWin[6];
 		
-		for (int j = 0; j < 3; j++)
+		for (unsigned int j = 0; j < 3; j++)
 		{
-			v[j] = transformP3( cube.vertices[ cube.faces[i].indices[j] ], transformMatrix );
+			v[j] = transformP3( cube.vertices[ cube.faces[i].vertexIndex[j] ].pos, transformMatrix );
 			
 			mapToWin[2*j]   = ( v[j][0] * camera.zoomFactor / (width/(float)height)  ) + (width / 2.0f);
 			mapToWin[2*j+1] = (-v[j][1] * camera.zoomFactor ) + (height / 2.0f);
@@ -124,7 +107,7 @@ void g3::Screen::render()
 		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5]);
 		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1]);
 	}
-
+	
 	/*
 	std::size_t nVertices = cube.nVertices;
 	for (int i = 0; i < nVertices; i++)
@@ -137,6 +120,7 @@ void g3::Screen::render()
 	}
 	*/
 }
+
 
 /**
  * Draws a line.
@@ -224,7 +208,9 @@ bool g3::Screen::on_idle()
 	// ...
 
 	// Rotates the cube around the y axis in radians.
-	rotationY += 0.01;
+	//cube.rotationX += 0.01;
+	cube.rotationY += 0.01;
+	//cube.rotationZ += 0.01;
 
 	return true;
 }
