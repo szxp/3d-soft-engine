@@ -36,7 +36,7 @@ camera { Vec3{17, 7, -20}, Vec3{2, 0, 2}, 1280 }
 void g3::World::clear()
 {
 	// Fill the buffer with color white
-	frontBuffer->fill(0x000000ff);
+	frontBuffer->fill(0xfafad2ff);
 	
 }
 
@@ -98,15 +98,43 @@ void g3::World::render()
 			mapToWin[2*j+1] = mapYToWin( v[j][1] );
 		}
 
-		unsigned long color = createRGBA(255, 255, 0, 255);
+		unsigned long color = createRGBA(0, 0, 128, 255);
 		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3], color);
 		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5], color);
 		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1], color);
 	}
 
 
-	// render axes
+
 	Mat4 staticMatrix = createScaleMatrix(1) * viewMatrix * projectionMatrix;
+	
+	// render grid ground
+	float step = 1;
+	int size = 12; // size X size
+	Vec3 grid [ 4*(size+1) ];
+	
+	Vec3 startX {  size/2.0f*step, 0, size/2.0f*step  };
+	for (int n = 0, m = 0; n < (size+1); n++, m+=4)
+	{
+		grid[m]   = { startX[0],               0, startX[2] - (n*step) };	
+		grid[m+1] = { startX[0] - (size*step), 0, startX[2] - (n*step) };	
+		grid[m+2] = { startX[0] - (n*step),    0, startX[2] };	
+		grid[m+3] = { startX[0] - (n*step),    0, startX[2] - (size*step) };	
+	}
+
+	unsigned long gridColor = createRGBA(205, 201, 201, 255);
+	for (int n = 0; n < 4*(size+1); n+=2)
+	{
+		Vec3 g1 = transformP3( grid[n], staticMatrix );
+		int g1X = mapXToWin( g1[0] );
+		int g1Y = mapYToWin( g1[1] );
+		Vec3 g2 = transformP3( grid[n+1], staticMatrix );
+		int g2X = mapXToWin( g2[0] );
+		int g2Y = mapYToWin( g2[1] );
+		drawLine(g1X, g1Y, g2X, g2Y, gridColor);
+	}
+
+	// render axes
 	Vec3 origo {0, 0, 0};
 	origo = transformP3( origo, staticMatrix );
 
@@ -128,9 +156,6 @@ void g3::World::render()
 		drawLine(origoX, origoY, endX, endY, axesColor[k]);
 	}
 
-	// render grid ground
-	//int step = 2;
-	//Vec3 ground[1];
 
 	/*
 	std::size_t nVertices = cube.nVertices;
@@ -211,7 +236,9 @@ void g3::World::drawPoint(int x, int y, unsigned long color)
 		pixel[0] = (color >> 24) & 0xff; // red
 		pixel[1] = (color >> 16) & 0xff; // blue
 		pixel[2] = (color >>  8) & 0xff; // grenn
-		pixel[3] = color & 0xff;         // alpha
+		
+		// alpha ignored
+		// pixel[3] =  color & 0xff;         // alpha
 	}
 }
 
