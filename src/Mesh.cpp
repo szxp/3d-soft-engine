@@ -45,5 +45,5 @@ g3::Mat4 g3::getWorldMatrix(g3::TriangleMesh& mesh)
 	Quaternion rotY = g3::createQuaternion(axisY, mesh.rotationY);
 	Quaternion rotZ = g3::createQuaternion(axisZ, mesh.rotationZ);
 
-	return g3::createScaleMatrix(1) * g3::createRotationMatrix(rotY);
+	return g3::createRotationMatrix(rotZ * rotY * rotX);
 }

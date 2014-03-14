@@ -32,9 +32,22 @@ g3::Quaternion g3::createQuaternion(const g3::Vec3& axis, const float rad)
  */
 g3::Quaternion g3::operator*(const g3::Quaternion& lhs, const g3::Quaternion& rhs)
 {
+	float x1 = lhs.v[0];
+	float y1 = lhs.v[1];
+	float z1 = lhs.v[2];
+	float w1 = lhs.s;
+	float x2 = rhs.v[0];
+	float y2 = rhs.v[1];
+	float z2 = rhs.v[2];
+	float w2 = rhs.s;
+
 	return {
-		{ (lhs.s * rhs.v) + (rhs.s * lhs.v) + ( g3::crossProduct(lhs.v, rhs.v) )  },
-		(lhs.s * rhs.s) - (g3::dotProduct(lhs.v, rhs.v))
+		{
+			(w1*x2) + (x1*w2) + (y1*z2) - (z1*y2),
+			(w1*y2) - (x1*z2) + (y1*w2) + (z1*x2),
+			(w1*z2) + (x1*y2) - (y1*x2) + (z1*w2)
+		},
+		(w1*w2) - (x1*x2) - (y1*y2) - (z1*z2)
 	};
 }
 
@@ -81,10 +94,12 @@ g3::Mat4 g3::createRotationMatrix(const g3::Quaternion& q)
 	float z = q.v[2];
 	float w = q.s;
 
+	// There are some good opportunities for optimization, but it works. :)
 	return {
-		1-(2*y*y)-(2*z*z), (2*x*y)-(2*w*z),   (2*x*z)+(2*w*y),   0,
-		(2*x*y)+(2*w*z),   1-(2*x*x)-(2*z*z), (2*y*z)+(2*w*x),   0,
-		(2*x*z)-(2*w*y),   (2*y*z)-(2*w*x),   1-(2*x*x)-(2*y*y), 0,
+		1-(2*y*y)-(2*z*z), (2*x*y)+(2*w*z),   (2*x*z)-(2*w*y),   0,
+		(2*x*y)-(2*w*z),   1-(2*x*x)-(2*z*z), (2*y*z)+(2*w*x),   0,
+		(2*x*z)+(2*w*y),   (2*y*z)-(2*w*x),   1-(2*x*x)-(2*y*y), 0,
 		0,                 0,                 0,                 1
 	};
+
 }

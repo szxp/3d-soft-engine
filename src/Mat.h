@@ -227,6 +227,12 @@ constexpr float toDeg(const float rad)
 }
 
 /**
+ * Transponses a matrix.
+ */
+Mat4 transponse(const Mat4& mat);
+
+
+/**
  * Returns a rotation matrix in row major order that can be used to rotate 
  * a set of vertices around the x-axis.
  *

@@ -3,6 +3,19 @@
 #include <cmath>
 
 /**
+ * Transponses a matrix.
+ */
+g3::Mat4 g3::transponse(const Mat4& mat)
+{
+	return {
+		mat[0], mat[4], mat[8],  mat[12],
+		mat[1], mat[5], mat[9],  mat[13],
+		mat[2], mat[6], mat[10], mat[14],
+		mat[3], mat[7], mat[11], mat[15]
+	};
+}
+
+/**
  * Transforms a 3D point with a 4x4 matrix.
  */
 g3::Vec3 g3::transformP3(const Vec3& vec, const Mat4& mat)
@@ -101,8 +114,8 @@ g3::Mat4 g3::createRotationXMatrix(const float rad)
 {
 	return Mat4 {
 		1, 0,             0,              0,
-		0, std::cos(rad), -std::sin(rad), 0,
-		0, std::sin(rad), std::cos(rad),  0,
+		0, std::cos(rad), std::sin(rad), 0,
+		0, -std::sin(rad), std::cos(rad),  0,
 		0, 0,             0,              1
 	};
 }
@@ -119,9 +132,9 @@ g3::Mat4 g3::createRotationXMatrix(const float rad)
 g3::Mat4 g3::createRotationYMatrix(const float rad)
 {
 	return Mat4 {
-		std::cos(rad),  0, std::sin(rad), 0,
+		std::cos(rad),  0, -std::sin(rad), 0,
 		0,              1, 0,             0,
-		-std::sin(rad), 0, std::cos(rad), 0,
+		std::sin(rad), 0, std::cos(rad), 0,
 		0,              0, 0,             1
 	};
 }
@@ -138,8 +151,8 @@ g3::Mat4 g3::createRotationYMatrix(const float rad)
 g3::Mat4 g3::createRotationZMatrix(const float rad)
 {
 	return Mat4 {
-		std::cos(rad), -std::sin(rad), 0, 0,
-		std::sin(rad), std::cos(rad),  0, 0,
+		std::cos(rad), std::sin(rad), 0, 0,
+		-std::sin(rad), std::cos(rad),  0, 0,
 		0,             0,              1, 0,
 		0,             0,              0, 1
 	};

@@ -208,9 +208,9 @@ bool g3::Screen::on_idle()
 	// ...
 
 	// Rotates the cube around the y axis in radians.
-	//cube.rotationX += 0.01;
+	cube.rotationX += 0.01;
 	cube.rotationY += 0.01;
-	//cube.rotationZ += 0.01;
+	cube.rotationZ += 0.01;
 
 	return true;
 }
