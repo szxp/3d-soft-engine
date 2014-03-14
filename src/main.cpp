@@ -1,24 +1,25 @@
 
 #include <iostream>
 #include <gtkmm/window.h>
-#include "Screen.h"
+#include "World.h"
 
-using namespace std;
-using namespace g3;
 
 int main (int argc, char** argv)
 {
 
 	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv);
 
+	Glib::RefPtr<Gdk::Screen> screen = Gdk::Screen::get_default();
+	int width = screen->get_width();
+	int height = screen->get_height(); 
+
 	Gtk::Window window;
-	const int width = 640;
-	const int height = 480;
 	window.set_default_size(width, height);
+	window.fullscreen();
         
-	Screen screen (width, height);
-	window.add(screen);
-	screen.show();
+	g3::World world (width, height);
+	window.add(world);
+	world.show();
 
 	return app->run(window);
 }

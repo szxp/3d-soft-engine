@@ -86,6 +86,11 @@ struct TriangleMesh
 	 */
 	float rotationZ;
 
+	/**
+	 * The position of the mesh in the world.
+	 */
+	Vec3 loc;
+
 }; // struct TriangleMesh
 
 

@@ -30,6 +30,7 @@ void g3::loadCube(g3::TriangleMesh& mesh)
 	}
 
 	mesh.rotationX = mesh.rotationY = mesh.rotationZ = 0;
+	mesh.loc = {0, 0, 0};
 }
 
 
@@ -45,5 +46,6 @@ g3::Mat4 g3::getWorldMatrix(g3::TriangleMesh& mesh)
 	Quaternion rotY = g3::createQuaternion(axisY, mesh.rotationY);
 	Quaternion rotZ = g3::createQuaternion(axisZ, mesh.rotationZ);
 
-	return g3::createRotationMatrix(rotZ * rotY * rotX);
+	
+	return g3::createRotationMatrix(rotZ * rotY * rotX) * g3::createTranslationMatrix(mesh.loc[0], mesh.loc[1], mesh.loc[2]);
 }

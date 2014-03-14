@@ -1,5 +1,5 @@
 
-#include "Screen.h"
+#include "World.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -7,12 +7,12 @@
 #include "Quaternion.h"
 #include "Mesh.h"
 
-g3::Screen::Screen(unsigned int w, unsigned int h):
+g3::World::World(unsigned int w, unsigned int h):
 width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
 targetFrameTime {33300000},
-camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 }
+camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 1280 }
 {
 	g3::loadCube(cube);
 
@@ -25,8 +25,7 @@ camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 }
 	add_events(Gdk::BUTTON_PRESS_MASK | Gdk::SCROLL_MASK);
 
 	// register idle function
-	Glib::signal_idle().connect(sigc::mem_fun(*this, &Screen::on_idle));
-
+	Glib::signal_idle().connect(sigc::mem_fun(*this, &World::on_idle));
 
 }
 
@@ -34,7 +33,7 @@ camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 800 }
 /**
  * Clears the backbuffer.
  */
-void g3::Screen::clear()
+void g3::World::clear()
 {
 	// Fill the buffer with color white
 	frontBuffer->fill(0x000000ff);
@@ -44,7 +43,7 @@ void g3::Screen::clear()
 /**
  * Detects mouse wheel movements. Called by the GUI.
  */
-bool g3::Screen::on_scroll_event(GdkEventScroll* event)
+bool g3::World::on_scroll_event(GdkEventScroll* event)
 {
 	float zoomFactorPercent = 0.05;
 
@@ -63,12 +62,8 @@ bool g3::Screen::on_scroll_event(GdkEventScroll* event)
 /**
  * The drawing function, called by the GUI.
  */
-bool g3::Screen::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
+bool g3::World::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
 	
-	//Gtk::Allocation allocation = get_allocation();
-	//const int width  = allocation.get_width();
-	//const int height = allocation.get_height();
-
 	render();
 	
 	// Draw the buffer
@@ -81,7 +76,7 @@ bool g3::Screen::on_draw(const Cairo::RefPtr<Cairo::Context>& cr) {
 /**
  * Renders the scene.
  */
-void g3::Screen::render()
+void g3::World::render()
 {
 	clear();
 
@@ -99,15 +94,22 @@ void g3::Screen::render()
 		{
 			v[j] = transformP3( cube.vertices[ cube.faces[i].vertexIndex[j] ].pos, transformMatrix );
 			
-			mapToWin[2*j]   = ( v[j][0] * camera.zoomFactor / (width/(float)height)  ) + (width / 2.0f);
-			mapToWin[2*j+1] = (-v[j][1] * camera.zoomFactor ) + (height / 2.0f);
+			mapToWin[2*j]   = mapXToWin( v[j][0] );
+			mapToWin[2*j+1] = mapYToWin( v[j][1] );
 		}
 
 		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3]);
 		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5]);
 		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1]);
 	}
+
+
+	// render axes
+	Vec3 axes[] { {1, 0, 0}, {0, 1, 0}, {0, 0, 1} };
+
 	
+
+
 	/*
 	std::size_t nVertices = cube.nVertices;
 	for (int i = 0; i < nVertices; i++)
@@ -121,11 +123,26 @@ void g3::Screen::render()
 	*/
 }
 
+/**
+ * Maps the x coordinate to the window coordinate system
+ */
+inline int g3::World::mapXToWin(float x)
+{
+	return ( x * camera.zoomFactor / (width/(float)height)  ) + (width / 2.0f);
+}
+
+/**
+ * Maps the y coordinate to the window coordinate system
+ */
+inline int g3::World::mapYToWin(float y)
+{
+	return ( -y * camera.zoomFactor ) + (height / 2.0f);
+}
 
 /**
  * Draws a line.
  */
-void g3::Screen::drawLine(int x0, int y0, int x1, int y1)
+void g3::World::drawLine(int x0, int y0, int x1, int y1)
 {
 	int dx = std::abs(x1 - x0);
 	int dy = std::abs(y1 - y0);
@@ -148,7 +165,7 @@ void g3::Screen::drawLine(int x0, int y0, int x1, int y1)
 /**
  * Draws a point on the screen.
  */
-void g3::Screen::drawPoint(int x, int y)
+void g3::World::drawPoint(int x, int y)
 {
 
 	if ((x >= 0) && (y >=0) && (x < width) && (y < height))
@@ -167,7 +184,7 @@ void g3::Screen::drawPoint(int x, int y)
  *
  * @return Time point in nanoseconds.
  */
-unsigned long g3::Screen::clock_time()
+unsigned long g3::World::clock_time()
 {
 	timespec ts;
 	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
@@ -178,7 +195,7 @@ unsigned long g3::Screen::clock_time()
  * This idle callback function is executed as often as possible, 
  * hence it is ideal for processing intensive tasks.
  */
-bool g3::Screen::on_idle()
+bool g3::World::on_idle()
 {
 	// finish current frame
 	finishFrameTime = clock_time();

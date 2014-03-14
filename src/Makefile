@@ -7,7 +7,7 @@ LDFLAGS=`pkg-config gtkmm-3.0 --libs`
 DEPFILE=.depend
 DEPFILE_TEST=.depend-test
 
-SRCS=Vec.cpp Mat.cpp Quaternion.cpp Mesh.cpp Screen.cpp main.cpp
+SRCS=Vec.cpp Mat.cpp Quaternion.cpp Mesh.cpp World.cpp main.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 SRCS_TEST=test.cpp

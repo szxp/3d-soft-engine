@@ -13,11 +13,11 @@ namespace g3
 /**
  * Implements the graphics pipeline.
  */
-class Screen: public Gtk::DrawingArea {
+class World: public Gtk::DrawingArea {
 
 	public:
-	Screen(unsigned int w, unsigned int h);
-	virtual ~Screen(){};
+	World(unsigned int w, unsigned int h);
+	virtual ~World(){};
 	
 	/**
 	 * Clears the backbuffer.
@@ -46,6 +46,16 @@ class Screen: public Gtk::DrawingArea {
 	 * Renders the scene.
 	 */
 	void render();
+
+	/**
+	 * Maps the x coordinate to the window coordinate system
+	 */
+	int mapXToWin(float x);
+	
+	/**
+	 * Maps the y coordinate to the window coordinate system
+	 */
+	int mapYToWin(float y);
 
 	/**
 	 * Draws a point on the screen.
