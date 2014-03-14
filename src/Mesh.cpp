@@ -30,7 +30,7 @@ void g3::loadCube(g3::TriangleMesh& mesh)
 	}
 
 	mesh.rotationX = mesh.rotationY = mesh.rotationZ = 0;
-	mesh.loc = {0, 0, 0};
+	mesh.loc = {2, 1, 2};
 }
 
 

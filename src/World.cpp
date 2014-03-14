@@ -12,7 +12,7 @@ width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
 targetFrameTime {33300000},
-camera { Vec3{10, 8, -10}, Vec3{0, 0, 0}, 1280 }
+camera { Vec3{17, 7, -20}, Vec3{2, 0, 2}, 1280 }
 {
 	g3::loadCube(cube);
 
@@ -98,17 +98,39 @@ void g3::World::render()
 			mapToWin[2*j+1] = mapYToWin( v[j][1] );
 		}
 
-		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3]);
-		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5]);
-		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1]);
+		unsigned long color = createRGBA(255, 255, 0, 255);
+		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3], color);
+		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5], color);
+		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1], color);
 	}
 
 
 	// render axes
+	Mat4 staticMatrix = createScaleMatrix(1) * viewMatrix * projectionMatrix;
+	Vec3 origo {0, 0, 0};
+	origo = transformP3( origo, staticMatrix );
+
+	int origoX = mapXToWin( origo[0] );
+	int origoY = mapYToWin( origo[1] );
+
 	Vec3 axes[] { {1, 0, 0}, {0, 1, 0}, {0, 0, 1} };
+	unsigned long axesColor[] {
+		createRGBA(255, 0, 0, 255),
+		createRGBA(0, 255, 0, 255),
+		createRGBA(0, 0, 255, 255)
+	};
 
-	
+	for (int k = 0; k < 3; k++)
+	{
+		Vec3 axisEnd = transformP3( axes[k], staticMatrix );
+		int endX = mapXToWin( axisEnd[0] );
+		int endY = mapYToWin( axisEnd[1] );
+		drawLine(origoX, origoY, endX, endY, axesColor[k]);
+	}
 
+	// render grid ground
+	//int step = 2;
+	//Vec3 ground[1];
 
 	/*
 	std::size_t nVertices = cube.nVertices;
@@ -139,10 +161,23 @@ inline int g3::World::mapYToWin(float y)
 	return ( -y * camera.zoomFactor ) + (height / 2.0f);
 }
 
+
+/**
+ * Creates an RGBA color as a long.
+ */
+inline unsigned long g3::createRGBA(int r, int g, int b, int a)
+{
+	return ((r & 0xff) << 24) 
+		+ ((g & 0xff) << 16) 
+		+ ((b & 0xff) << 8) 
+		+ (a & 0xff);
+}
+
+
 /**
  * Draws a line.
  */
-void g3::World::drawLine(int x0, int y0, int x1, int y1)
+void g3::World::drawLine(int x0, int y0, int x1, int y1, unsigned long color)
 {
 	int dx = std::abs(x1 - x0);
 	int dy = std::abs(y1 - y0);
@@ -153,7 +188,7 @@ void g3::World::drawLine(int x0, int y0, int x1, int y1)
 
 	while (true)
 	{
-		drawPoint(x0, y0);
+		drawPoint(x0, y0, color);
 
 		if ((x0 == x1) && (y0 == y1)) break;
 		int e2 = 2 * err;
@@ -165,7 +200,7 @@ void g3::World::drawLine(int x0, int y0, int x1, int y1)
 /**
  * Draws a point on the screen.
  */
-void g3::World::drawPoint(int x, int y)
+void g3::World::drawPoint(int x, int y, unsigned long color)
 {
 
 	if ((x >= 0) && (y >=0) && (x < width) && (y < height))
@@ -173,9 +208,10 @@ void g3::World::drawPoint(int x, int y)
 		int offset  = y * frontBuffer->get_rowstride() + x * frontBuffer->get_n_channels();
 		guchar* pixel = &frontBuffer->get_pixels()[ offset ];
 
-		pixel[0]=255;
-		pixel[1]=255;
-		pixel[2]=0;
+		pixel[0] = (color >> 24) & 0xff; // red
+		pixel[1] = (color >> 16) & 0xff; // blue
+		pixel[2] = (color >>  8) & 0xff; // grenn
+		pixel[3] = color & 0xff;         // alpha
 	}
 }
 

@@ -56,16 +56,17 @@ class World: public Gtk::DrawingArea {
 	 * Maps the y coordinate to the window coordinate system
 	 */
 	int mapYToWin(float y);
+	
 
 	/**
 	 * Draws a point on the screen.
 	 */
-	void drawPoint(int x, int y);
+	void drawPoint(int x, int y, unsigned long color);
 
 	/**
 	 * Draws a line.
 	 */
-	void drawLine(int x0, int y0, int x1, int y1);
+	void drawLine(int x0, int y0, int x1, int y1, unsigned long color);
 
 	/**
 	 * Returns a time point in nanoseconds.
@@ -117,6 +118,12 @@ class World: public Gtk::DrawingArea {
 	TriangleMesh cube;
 
 };
+
+/**
+ * Creates an RGBA color as a long.
+ */
+unsigned long createRGBA(int r, int g, int b, int a);
+
 
 }
 
