@@ -6,6 +6,8 @@
 #include "Mat.h"
 #include "Quaternion.h"
 #include "Mesh.h"
+#include <memory>
+#include <limits>
 
 g3::World::World(unsigned int w, unsigned int h):
 width {w},
@@ -14,12 +16,16 @@ frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width
 targetFrameTime {33300000},
 camera { Vec3{17, 7, -20}, Vec3{2, 0, 2}, 1280 }
 {
-	g3::loadCube(cube);
+	// initializes the depth buffer.
+	int depthSize = width * height;
+	depthBuffer.reset(new float[depthSize]);
+	std::fill(depthBuffer.get(), depthBuffer.get() + depthSize, std::numeric_limits<float>::infinity());
+
 
 	// start frame time
 	startFrameTime = clock_time();
 
-	clear();
+	g3::loadCube(cube);
 	
 	// enable mouse wheel detection
 	add_events(Gdk::BUTTON_PRESS_MASK | Gdk::SCROLL_MASK);
@@ -37,7 +43,9 @@ void g3::World::clear()
 {
 	// Fill the buffer with color white
 	frontBuffer->fill(0xfafad2ff);
-	
+
+	// Clears the depth buffer
+	std::fill(depthBuffer.get(), depthBuffer.get() + (width*height), std::numeric_limits<float>::infinity());
 }
 
 /**
@@ -99,9 +107,9 @@ void g3::World::render()
 		}
 
 		unsigned long color = createRGBA(0, 0, 128, 255);
-		drawLine(mapToWin[0], mapToWin[1], mapToWin[2], mapToWin[3], color);
-		drawLine(mapToWin[2], mapToWin[3], mapToWin[4], mapToWin[5], color);
-		drawLine(mapToWin[4], mapToWin[5], mapToWin[0], mapToWin[1], color);
+		drawLine(mapToWin[0], mapToWin[1], v[0][2], mapToWin[2], mapToWin[3], v[1][2], color);
+		drawLine(mapToWin[2], mapToWin[3], v[1][2], mapToWin[4], mapToWin[5], v[2][2], color);
+		drawLine(mapToWin[4], mapToWin[5], v[2][2], mapToWin[0], mapToWin[1], v[0][2], color);
 	}
 
 
@@ -131,7 +139,7 @@ void g3::World::render()
 		Vec3 g2 = transformP3( grid[n+1], staticMatrix );
 		int g2X = mapXToWin( g2[0] );
 		int g2Y = mapYToWin( g2[1] );
-		drawLine(g1X, g1Y, g2X, g2Y, gridColor);
+		drawLine(g1X, g1Y, g1[2], g2X, g2Y, g2[2], gridColor);
 	}
 
 	// render axes
@@ -153,7 +161,7 @@ void g3::World::render()
 		Vec3 axisEnd = transformP3( axes[k], staticMatrix );
 		int endX = mapXToWin( axisEnd[0] );
 		int endY = mapYToWin( axisEnd[1] );
-		drawLine(origoX, origoY, endX, endY, axesColor[k]);
+		drawLine(origoX, origoY, origo[2], endX, endY, axisEnd[2], axesColor[k]);
 	}
 
 
@@ -202,18 +210,29 @@ inline unsigned long g3::createRGBA(int r, int g, int b, int a)
 /**
  * Draws a line.
  */
-void g3::World::drawLine(int x0, int y0, int x1, int y1, unsigned long color)
+void g3::World::drawLine(int x0, int y0, float z0, int x1, int y1, float z1, unsigned long color)
 {
+
+	int x = x0;
+	int y = y0;
+	int z = z0;
+
 	int dx = std::abs(x1 - x0);
 	int dy = std::abs(y1 - y0);
+	float dz = std::abs(z1 - z0);
 	int sx = (x0 < x1) ? 1 : -1;
 	int sy = (y0 < y1) ? 1 : -1;
 
 	int err = dx - dy;
 
+	float lenTotal = (dx*dx) + (dy*dy);
+	float lenPart = 0;
+
 	while (true)
 	{
-		drawPoint(x0, y0, color);
+		lenPart = ((x0-x)*(x0-x)) + ((y0-y)*(y0-y));
+		z0 = z0 + (dz * (lenPart/lenTotal) );
+		drawPoint(x0, y0, z0, color);
 
 		if ((x0 == x1) && (y0 == y1)) break;
 		int e2 = 2 * err;
@@ -225,20 +244,30 @@ void g3::World::drawLine(int x0, int y0, int x1, int y1, unsigned long color)
 /**
  * Draws a point on the screen.
  */
-void g3::World::drawPoint(int x, int y, unsigned long color)
+void g3::World::drawPoint(int x, int y, float z, unsigned long color)
 {
 
 	if ((x >= 0) && (y >=0) && (x < width) && (y < height))
 	{
-		int offset  = y * frontBuffer->get_rowstride() + x * frontBuffer->get_n_channels();
-		guchar* pixel = &frontBuffer->get_pixels()[ offset ];
 
-		pixel[0] = (color >> 24) & 0xff; // red
-		pixel[1] = (color >> 16) & 0xff; // blue
-		pixel[2] = (color >>  8) & 0xff; // grenn
+		// depth test
+		int targetPixel = y * width + x;
+		if ( z < depthBuffer[targetPixel] )
+		{
+			// saves the new depth value
+			depthBuffer[targetPixel] = z;
+
+			// sets the color of the pixel
+			int offset  = y * frontBuffer->get_rowstride() + x * frontBuffer->get_n_channels();
+			guchar* pixel = &frontBuffer->get_pixels()[ offset ];
+
+			pixel[0] = (color >> 24) & 0xff; // red
+			pixel[1] = (color >> 16) & 0xff; // blue
+			pixel[2] = (color >>  8) & 0xff; // grenn
 		
-		// alpha ignored
-		// pixel[3] =  color & 0xff;         // alpha
+			// alpha ignored
+			// pixel[3] =  color & 0xff;         // alpha
+		}
 	}
 }
 

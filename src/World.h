@@ -61,12 +61,12 @@ class World: public Gtk::DrawingArea {
 	/**
 	 * Draws a point on the screen.
 	 */
-	void drawPoint(int x, int y, unsigned long color);
+	void drawPoint(int x, int y, float z, unsigned long color);
 
 	/**
 	 * Draws a line.
 	 */
-	void drawLine(int x0, int y0, int x1, int y1, unsigned long color);
+	void drawLine(int x0, int y0, float z0, int x1, int y1, float z1, unsigned long color);
 
 	/**
 	 * Returns a time point in nanoseconds.
@@ -89,6 +89,11 @@ class World: public Gtk::DrawingArea {
 	 * Front buffer.
 	 */
 	Glib::RefPtr<Gdk::Pixbuf> frontBuffer;
+
+	/**
+	 * Depth buffer
+	 */
+	std::unique_ptr<float[]> depthBuffer;
 
 	/**
 	 * The target frame time in nanoseconds.
