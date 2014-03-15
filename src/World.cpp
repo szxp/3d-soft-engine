@@ -91,8 +91,8 @@ void g3::World::render()
 		* g3::createPerspectiveFovLHMatrix(0.78f, width / (float)height, 0.01f, 25.0f);
 
 	
-	renderWireframe(viewProjMatrix);
 	renderAxesAndGrid(viewProjMatrix);	
+	renderWireframe(viewProjMatrix);
 }
 
 /**
@@ -217,11 +217,6 @@ inline unsigned long g3::createRGBA(int r, int g, int b, int a)
  */
 void g3::World::drawLine(int x0, int y0, float z0, int x1, int y1, float z1, unsigned long color)
 {
-
-	int x = x0;
-	int y = y0;
-	int z = z0;
-
 	int dx = std::abs(x1 - x0);
 	int dy = std::abs(y1 - y0);
 	float dz = std::abs(z1 - z0);
@@ -229,20 +224,24 @@ void g3::World::drawLine(int x0, int y0, float z0, int x1, int y1, float z1, uns
 	int sy = (y0 < y1) ? 1 : -1;
 
 	int err = dx - dy;
+	float gradient = 0;
 
-	float lenTotal = (dx*dx) + (dy*dy);
-	float lenPart = 0;
+	int x = x0;
+	int y = y0;
+	int z = z0;
 
 	while (true)
 	{
-		lenPart = ((x0-x)*(x0-x)) + ((y0-y)*(y0-y));
-		z0 = z0 + (dz * lenPart/lenTotal);
-		drawPoint(x0, y0, z0, color);
+		drawPoint(x, y, z, color);
 
-		if ((x0 == x1) && (y0 == y1)) break;
+		if ((x == x1) && (y == y1)) break;
 		int e2 = 2 * err;
-		if (e2 > -dy) { err -= dy; x0 += sx; }
-		if (e2 < dx) { err += dx; y0 += sy; }
+		if (e2 > -dy) { err -= dy; x += sx; }
+		if (e2 < dx) { err += dx; y += sy; }
+
+		// interpolate z depth values
+		gradient = (dx > dy) ?  ((x-x0) / dx) : ((y-y0) / dy);
+		z = z0 + (dz * gradient);
 	}
 }
 
@@ -322,9 +321,9 @@ bool g3::World::on_idle()
 	// ...
 
 	// Rotates the cube around the y axis in radians.
-	cube.rotationX += 0.01;
-	cube.rotationY += 0.01;
-	cube.rotationZ += 0.01;
+	//cube.rotationX += 0.01;
+	//cube.rotationY += 0.01;
+	cube.rotationZ += 0.001;
 
 	return true;
 }
