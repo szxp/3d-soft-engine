@@ -116,9 +116,32 @@ void g3::World::render()
 
 	Mat4 staticMatrix = createScaleMatrix(1) * viewMatrix * projectionMatrix;
 	
+	// render axes
+	Vec3 origo {0, 0, 0};
+	origo = transformP3( origo, staticMatrix );
+
+	int origoX = mapXToWin( origo[0] );
+	int origoY = mapYToWin( origo[1] );
+
+	Vec3 axes[] { {1, 0, 0}, {0, 1, 0}, {0, 0, 1} };
+	unsigned long axesColor[] {
+		createRGBA(255, 0, 0, 255),
+		createRGBA(0, 255, 0, 255),
+		createRGBA(0, 0, 255, 255)
+	};
+
+	for (int k = 0; k < 3; k++)
+	{
+		Vec3 axisEnd = transformP3( axes[k], staticMatrix );
+		int endX = mapXToWin( axisEnd[0] );
+		int endY = mapYToWin( axisEnd[1] );
+		drawLine(origoX, origoY, origo[2], endX, endY, axisEnd[2], axesColor[k]);
+	}
+	
+	
 	// render grid ground
 	float step = 1;
-	int size = 12; // size X size
+	int size = 14; // size X size
 	Vec3 grid [ 4*(size+1) ];
 	
 	Vec3 startX {  size/2.0f*step, 0, size/2.0f*step  };
@@ -142,27 +165,6 @@ void g3::World::render()
 		drawLine(g1X, g1Y, g1[2], g2X, g2Y, g2[2], gridColor);
 	}
 
-	// render axes
-	Vec3 origo {0, 0, 0};
-	origo = transformP3( origo, staticMatrix );
-
-	int origoX = mapXToWin( origo[0] );
-	int origoY = mapYToWin( origo[1] );
-
-	Vec3 axes[] { {1, 0, 0}, {0, 1, 0}, {0, 0, 1} };
-	unsigned long axesColor[] {
-		createRGBA(255, 0, 0, 255),
-		createRGBA(0, 255, 0, 255),
-		createRGBA(0, 0, 255, 255)
-	};
-
-	for (int k = 0; k < 3; k++)
-	{
-		Vec3 axisEnd = transformP3( axes[k], staticMatrix );
-		int endX = mapXToWin( axisEnd[0] );
-		int endY = mapYToWin( axisEnd[1] );
-		drawLine(origoX, origoY, origo[2], endX, endY, axisEnd[2], axesColor[k]);
-	}
 
 
 	/*
