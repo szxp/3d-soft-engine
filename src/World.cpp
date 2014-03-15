@@ -14,13 +14,10 @@ width {w},
 height {h},
 frontBuffer {Gdk::Pixbuf::create(Gdk::Colorspace::COLORSPACE_RGB, true, 8, width, height)},
 targetFrameTime {33300000},
-camera { Vec3{17, 7, -20}, Vec3{2, 0, 2}, 1280 }
+camera { Vec3{17, 10, -20}, Vec3{1, 0, 2}, 1280 }
 {
 	// initializes the depth buffer.
-	int depthSize = width * height;
-	depthBuffer.reset(new float[depthSize]);
-	std::fill(depthBuffer.get(), depthBuffer.get() + depthSize, std::numeric_limits<float>::infinity());
-
+	depthBuffer.reset(new float[width * height]);
 
 	// start frame time
 	startFrameTime = clock_time();
@@ -32,12 +29,11 @@ camera { Vec3{17, 7, -20}, Vec3{2, 0, 2}, 1280 }
 
 	// register idle function
 	Glib::signal_idle().connect(sigc::mem_fun(*this, &World::on_idle));
-
 }
 
 
 /**
- * Clears the backbuffer.
+ * Clears the buffers.
  */
 void g3::World::clear()
 {
@@ -88,10 +84,24 @@ void g3::World::render()
 {
 	clear();
 
+	
 	Vec3 upWorld {0,1,0};
-	Mat4 viewMatrix = g3::createLookAtLHMatrix(camera.eye, camera.target, upWorld);
-	Mat4 projectionMatrix = g3::createPerspectiveFovLHMatrix(0.78f, width / (float)height, 0.01f, 25.0f);
-	Mat4 transformMatrix = g3::getWorldMatrix(cube) * viewMatrix * projectionMatrix;
+
+	Mat4 viewProjMatrix = g3::createLookAtLHMatrix(camera.eye, camera.target, upWorld)
+		* g3::createPerspectiveFovLHMatrix(0.78f, width / (float)height, 0.01f, 25.0f);
+
+	
+	renderWireframe(viewProjMatrix);
+	renderAxesAndGrid(viewProjMatrix);	
+}
+
+/**
+ * Renders the cube wireframe.
+ */
+void g3::World::renderWireframe(const g3::Mat4& viewProjMatrix)
+{
+		
+	Mat4 transformMatrix = g3::getWorldMatrix(cube) * viewProjMatrix;
 
 	for (unsigned int i = 0; i < cube.nFaces; i++)
 	{
@@ -111,10 +121,16 @@ void g3::World::render()
 		drawLine(mapToWin[2], mapToWin[3], v[1][2], mapToWin[4], mapToWin[5], v[2][2], color);
 		drawLine(mapToWin[4], mapToWin[5], v[2][2], mapToWin[0], mapToWin[1], v[0][2], color);
 	}
+}
 
-
-
-	Mat4 staticMatrix = createScaleMatrix(1) * viewMatrix * projectionMatrix;
+/**
+ * Renders the axes and the grid ground.
+ */
+void g3::World::renderAxesAndGrid(const g3::Mat4& viewProjMat)
+{
+	
+	Mat4 staticMatrix = createScaleMatrix(1) * viewProjMat;
+	
 	
 	// render axes
 	Vec3 origo {0, 0, 0};
@@ -141,7 +157,7 @@ void g3::World::render()
 	
 	// render grid ground
 	float step = 1;
-	int size = 14; // size X size
+	int size = 8; // size X size
 	Vec3 grid [ 4*(size+1) ];
 	
 	Vec3 startX {  size/2.0f*step, 0, size/2.0f*step  };
@@ -165,19 +181,6 @@ void g3::World::render()
 		drawLine(g1X, g1Y, g1[2], g2X, g2Y, g2[2], gridColor);
 	}
 
-
-
-	/*
-	std::size_t nVertices = cube.nVertices;
-	for (int i = 0; i < nVertices; i++)
-	{
-		
-		Vec3 v = transformP3( cube.vertices[ i ], transformMatrix );
-		int x  = ( v[0] * camera.zoomFactor / (width/(float)height) ) + (width / 2);
-		int y  = (-v[1] * camera.zoomFactor ) + (height / 2);
-		drawPoint(x, y);
-	}
-	*/
 }
 
 /**
@@ -233,7 +236,7 @@ void g3::World::drawLine(int x0, int y0, float z0, int x1, int y1, float z1, uns
 	while (true)
 	{
 		lenPart = ((x0-x)*(x0-x)) + ((y0-y)*(y0-y));
-		z0 = z0 + (dz * (lenPart/lenTotal) );
+		z0 = z0 + (dz * lenPart/lenTotal);
 		drawPoint(x0, y0, z0, color);
 
 		if ((x0 == x1) && (y0 == y1)) break;

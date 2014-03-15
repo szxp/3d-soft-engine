@@ -19,10 +19,6 @@ class World: public Gtk::DrawingArea {
 	World(unsigned int w, unsigned int h);
 	virtual ~World(){};
 	
-	/**
-	 * Clears the backbuffer.
-	 */
-	void clear();
 
 	/**
 	 * This idle callback function is executed as often as possible, 
@@ -43,9 +39,24 @@ class World: public Gtk::DrawingArea {
 	private:
 
 	/**
+	 * Clears the buffers.
+	 */
+	void clear();
+	
+	/**
 	 * Renders the scene.
 	 */
 	void render();
+
+	/**
+	 * Renders the cube wireframe.
+	 */
+	void renderWireframe(const Mat4& viewProjMat);
+
+	/**
+	 * Renders the axes and the grid ground.
+	 */
+	void renderAxesAndGrid(const Mat4& viewProjMat);
 
 	/**
 	 * Maps the x coordinate to the window coordinate system
