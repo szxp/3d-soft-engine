@@ -217,6 +217,26 @@ inline unsigned long g3::createRGBA(int r, int g, int b, int a)
  */
 void g3::World::drawLine(int x0, int y0, float z0, int x1, int y1, float z1, unsigned long color)
 {
+	// The line visible?
+	if ( (std::min(std::abs(x0), std::abs(x1)) > width) &&
+	     (std::min(std::abs(y0), std::abs(y1)) > height) )
+	{
+		/*
+		std::cout
+		<< x0 << ',' << y0 << '|'
+		<< x1 << ',' << y1 << '|'
+		<< width << '|'
+		<< height << '|'
+		<< (std::min(std::abs(x0), std::abs(x1)) > width/2) << '|'
+	        << (std::min(std::abs(y0), std::abs(y1)) > height/2)
+		<< std::endl;
+		*/
+
+
+		return;
+	}
+   
+
 	int dx = std::abs(x1 - x0);
 	int dy = std::abs(y1 - y0);
 	float dz = std::abs(z1 - z0);
@@ -243,6 +263,8 @@ void g3::World::drawLine(int x0, int y0, float z0, int x1, int y1, float z1, uns
 		gradient = (dx > dy) ?  ((x-x0) / dx) : ((y-y0) / dy);
 		z = z0 + (dz * gradient);
 	}
+	
+
 }
 
 /**
@@ -323,7 +345,7 @@ bool g3::World::on_idle()
 	// Rotates the cube around the y axis in radians.
 	//cube.rotationX += 0.01;
 	//cube.rotationY += 0.01;
-	cube.rotationZ += 0.001;
+	//cube.rotationZ += 0.001;
 
 	return true;
 }
