@@ -2,6 +2,10 @@
 
 This project is an implementation of the graphics pipeline in software in C++ only for educational purposes. The engine renders a rotating wireframe cube.
 
+## Build and run the demo
+
+Run the `make` command in the `src` directory and then run the `run` binary file.
+
 ## YouTube demo video
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=JBwWZDgK07w" target="_blank">
