@@ -343,8 +343,8 @@ bool g3::World::on_idle()
 	// ...
 
 	// Rotates the cube around the y axis in radians.
-	//cube.rotationX += 0.01;
-	//cube.rotationY += 0.01;
+	cube.rotationX += 0.01;
+	cube.rotationY += 0.01;
 	//cube.rotationZ += 0.001;
 
 	return true;
