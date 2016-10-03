@@ -1,4 +1,4 @@
-# 3d-graphics-engine
+# 3d soft engine
 
 This project is an implementation of the graphics pipeline in software in C++ only for educational purposes. The engine renders a rotating wireframe cube.
 
