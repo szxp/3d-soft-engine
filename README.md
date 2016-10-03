@@ -9,7 +9,11 @@ Install the following dependencies:
   * `pkg-config`
   * `g++`
   
-Then run the `make` command in the `src` directory and then run the `run` binary file.
+Then execute the following commands in the command line:
+  1. `git clone https://github.com/szxp/3d-soft-engine.git` 
+  2. `cd 3d-soft-engine.git/src`
+  3. `make`
+  4. `./run`
 
 Use the mouse scroll to zoom in or out.
 
