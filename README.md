@@ -2,9 +2,7 @@
 
 This project is an implementation of the graphics pipeline in software in C++ only for educational purposes. The engine renders a rotating wireframe cube.
 
-## Build and run the demo
-
-Install the following dependencies:
+To build and run the demo install the following dependencies:
   * `gtkmm`
   * `pkg-config`
   * `g++`
