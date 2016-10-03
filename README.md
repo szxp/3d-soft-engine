@@ -11,6 +11,8 @@ Install the following dependencies:
   
 Then run the `make` command in the `src` directory and then run the `run` binary file.
 
+Use the mouse scroll to zoom in or out.
+
 ## YouTube demo video
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=JBwWZDgK07w" target="_blank">
