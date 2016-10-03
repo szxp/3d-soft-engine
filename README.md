@@ -15,5 +15,5 @@ Then execute the following commands in the command line:
   3. `make`
   4. `./run`
 
-Use the mouse scroll to zoom in or out.
+Use the mouse wheel to zoom in or out.
 
