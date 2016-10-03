@@ -4,7 +4,12 @@ This project is an implementation of the graphics pipeline in software in C++ on
 
 ## Build and run the demo
 
-Run the `make` command in the `src` directory and then run the `run` binary file.
+Install the following dependencies:
+  * `gtkmm`
+  * `pkg-config`
+  * `g++`
+  
+Then run the `make` command in the `src` directory and then run the `run` binary file.
 
 ## YouTube demo video
 
