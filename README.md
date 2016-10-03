@@ -13,8 +13,3 @@ Then run the `make` command in the `src` directory and then run the `run` binary
 
 Use the mouse scroll to zoom in or out.
 
-## YouTube demo video
-
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=JBwWZDgK07w" target="_blank">
-	<img src="http://img.youtube.com/vi/JBwWZDgK07w/0.jpg" alt="Demo video" width="240" height="180" border="10" />
-</a>
