@@ -202,7 +202,7 @@ Mat4 createTranslationMatrix(const float valX, const float valY, const float val
 /**
  * PI constant
  */
-const float PI = 3.14159265358979;
+constexpr float PI = 3.14159265358979;
 
 /**
  * Converts degrees to radians.
