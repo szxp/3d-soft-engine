@@ -16,3 +16,4 @@ Then execute the following commands in the command line:
 
 Use the mouse wheel to zoom in or out.
 
+![Screenshot](screenshot.png)
