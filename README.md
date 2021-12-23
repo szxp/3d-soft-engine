@@ -12,7 +12,7 @@ Then execute the following commands in the command line:
   1. `git clone https://github.com/szxp/3d-soft-engine.git` 
   2. `cd 3d-soft-engine/src`
   3. `make`
-  4. `./run`
+  4. `./go`
 
 Use the mouse wheel to zoom in or out.
 
